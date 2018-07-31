@@ -39,5 +39,4 @@ get_header();
 get_footer();
 //the_widget( 'widget_ui_ads' );
 //dynamic_sidebar('public_header');
-var_dump($GLOBALS['comment']);
-echo get_option('thread_comments_depth');
+comments_template('', true);

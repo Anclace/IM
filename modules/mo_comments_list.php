@@ -13,10 +13,8 @@ function mo_comments_list($comment, $args, $depth) {
         $page     = get_query_var('cpage');//获取当前评论列表页码
         $cpp      = get_option('comments_per_page');//获取每页评论显示数量
         $pcs      = get_option('page_comments');//分页开关
-        
-        $comments = $wpdb->get_results("SELECT * FROM $wpdb->comments WHERE comment_post_ID = $post->ID AND comment_type = '' AND comment_approved = '1' AND !comment_parent");
+        $comments = $wpdb->get_results("SELECT * FROM $wpdb->comments WHERE comment_post_ID = $post->ID AND comment_type = '' AND comment_approved = '1' AND !comment_parent");//获取主评论总数量
         $cnt      = count($comments);//获取主评论总数量
-
         if ( get_option('comment_order') === 'desc' ) { //倒序
             if (!$pcs || ceil($cnt / $cpp) == 1 || ($page > 1 && $page  == ceil($cnt / $cpp))) {
                 $commentcount = $cnt + 1;//如果评论只有1页或者是最后一页，初始值为主评论总数
@@ -32,10 +30,7 @@ function mo_comments_list($comment, $args, $depth) {
             }
         }
     }
-
-
     echo '<li '; comment_class(); echo ' id="comment-'.get_comment_ID().'">';
-
     if(!$parent_id = $comment->comment_parent ) {
         echo '<span class="comt-f">#'. (get_option('comment_order') === 'desc'?--$commentcount:++$commentcount) .'</span>';
     }

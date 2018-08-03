@@ -34,19 +34,14 @@ function mo_comments_list($comment, $args, $depth) {
     if(!$parent_id = $comment->comment_parent ) {
         echo '<span class="comt-f">#'. (get_option('comment_order') === 'desc'?--$commentcount:++$commentcount) .'</span>';
     }
-
     echo '<div class="comt-avatar">';
         echo _get_the_avatar($user_id=$comment->user_id, $user_email=$comment->comment_author_email);
     echo '</div>';
-
     echo '<div class="comt-main" id="div-comment-'.get_comment_ID().'">';
-
         comment_text();
-
         if ($comment->comment_approved == '0'){
             echo '<span class="comt-approved">待审核</span>';
         }
-
         echo '<div class="comt-meta"><span class="comt-author">'.get_comment_author_link().'</span>';
             echo _get_time_ago($comment->comment_date); 
             if ($comment->comment_approved !== '0'){
@@ -59,6 +54,5 @@ function mo_comments_list($comment, $args, $depth) {
                 }
             }
         echo '</div>';
-
     echo '</div>';
 }

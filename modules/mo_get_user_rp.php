@@ -4,15 +4,12 @@
  * @return [type] [description]
  */
 function mo_get_user_rp(){
-	$pid = _hui('user_rp');
-
+	$pid = im('user_pw_page');
 	if( !$pid ){
 		return false;
 	}
-
 	if( get_permalink($pid) ){
 		return get_permalink($pid);
 	}
-
 	return false;
 }

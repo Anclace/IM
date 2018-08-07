@@ -1,10 +1,10 @@
 <div class="branding branding-black">
 	<div class="container">
-		<h2><?php echo _hui('footer_brand_title') ?></h2>
+		<h2><?php echo im('footer_spreadings_title') ?></h2>
 		<?php  
 			for ($i=1; $i <= 2; $i++) { 
-				if( _hui('footer_brand_btn_text_'.$i) && _hui('footer_brand_btn_href_'.$i) ){
-					echo '<a'.(_hui('footer_brand_btn_blank_'.$i)?' target="blank"':'').' class="btn btn-lg" href="'._hui('footer_brand_btn_href_'.$i).'">'._hui('footer_brand_btn_text_'.$i).'</a>';
+				if( im('footer_spreadings_btn_title_'.$i) && im('footer_spreadings_btn_link_'.$i) ){
+					echo '<a'.(im('footer_spreadings_btn_link_target_'.$i)?' target="blank"':'').' class="btn btn-lg" href="'.im('footer_spreadings_btn_link_'.$i).'">'.im('footer_spreadings_btn_title_'.$i).'</a>';
 				}
 			}
 		?>

@@ -40,3 +40,6 @@ get_footer();
 //the_widget( 'widget_ui_ads' );
 //dynamic_sidebar('public_header');
 comments_template('', true);
+_moloader('mo_footer_brand','true');
+_moloader('mo_get_post_from',false);
+echo mo_get_post_from();

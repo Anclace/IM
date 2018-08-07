@@ -6,26 +6,22 @@
  * @return [type]           [description]
  */
 function mo_get_post_from($pid='', $prevtext='来源：'){
-    if( !_hui('post_from_s') ){
+    if( !im('article_source_section') ){
         return;
     }
-
     if( !$pid ){
         $pid = get_the_ID();
     }
-
-    $fromname = trim(get_post_meta($pid, "fromname_value", true));
-    $fromurl = trim(get_post_meta($pid, "fromurl_value", true));
+    $fromname = trim(get_post_meta($pid, "source_value", true));
+    $fromurl = trim(get_post_meta($pid, "source_link", true));
     $from = '';
-    
     if( $fromname ){
-        if( $fromurl && _hui('post_from_link_s') ){
+        if( $fromurl && im('article_source_section_link') ){
             $from = '<a href="'.$fromurl.'" target="_blank" rel="external nofollow">'.$fromname.'</a>';
         }else{
             $from = $fromname;
         }
-        $from = (_hui('post_from_h1')?_hui('post_from_h1'):$prevtext).$from;
+        $from = (im('article_source_section_title')?im('article_source_section_title'):$prevtext).$from;
     }
-
     return $from; 
 }

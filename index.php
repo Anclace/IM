@@ -43,3 +43,7 @@ comments_template('', true);
 _moloader('mo_footer_brand','true');
 _moloader('mo_get_post_from',false);
 echo mo_get_post_from();
+_moloader('mo_is_minicat',false);
+var_dump(mo_is_minicat());
+_moloader('mo_minicat',true);
+_moloader('mo_notice',true);

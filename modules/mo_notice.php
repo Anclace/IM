@@ -2,32 +2,32 @@
 /**
  * For site notice and user welcome
  */
-if( is_home() && (_hui('site_notice_s')||_hui('user_on_notice_s')) ) { 
-	$s_notice = _hui('site_notice_s');
-	$s_user = _hui('user_page_s') && _hui('user_on_notice_s');
-
+if( is_home() && (im('notice_district')||im('user_on_notice_module')) ) { 
+	$s_notice = im('notice_district');
+	$s_user = im('enable_user_center') && im('user_on_notice_module');
 	_moloader('mo_get_user_page', false);
 ?>
 	<div class="widget widget-tops">
 		<ul class="widget-nav">
-			<?php if( $s_notice ){ ?><li<?php echo ($s_notice) ? ' class="active"' : '' ?>><?php echo _hui('site_notice_title') ? _hui('site_notice_title') : '网站公告' ?></li><?php } ?>
+			<?php if( $s_notice ){ ?><li<?php echo ($s_notice) ? ' class="active"' : '' ?>><?php echo im('notice_district_title') ? im('notice_district_title') : '网站公告' ?></li><?php } ?>
 			<?php if( $s_user ){ ?><li<?php echo ($s_user && !$s_notice ) ? ' class="active"' : '' ?>>会员中心</li><?php } ?>
 		</ul>
 		<ul class="widget-navcontent">
-			<?php if( $s_notice && _hui('site_notice_cat') ){ ?>
+			<?php if( $s_notice && im('notice_district_cat') ){ ?>
 				<li class="item item-01<?php echo ($s_notice) ? ' active' : '' ?>">
 					<ul>
 						<?php  
 							$args = array(
 							    'ignore_sticky_posts' => 1,
-							    'showposts' => 5,
-							    'cat' => _hui('site_notice_cat')
+							    'posts_per_page' => 5,
+							    'cat' => im('notice_district_cat')
 							);
-							query_posts($args);
-							while ( have_posts() ) : the_post(); 
-								echo '<li><time>'.get_the_time('m-d').'</time><a target="_blank" href="'.get_permalink().'">'.get_the_title().get_the_subtitle().'</a></li>';
-							endwhile; 
-							wp_reset_query();
+							$fitposts = new WP_Query($args);
+							if($fitposts->have_posts()):
+								while($fitposts->have_posts()):$fitposts->the_post();
+									echo '<li><time>'.get_the_time('m-d').'</time><a target="_blank" href="'.get_permalink().'">'.get_the_title().get_the_subtitle().'</a></li>';
+								endwhile;
+							endif;
 						?>
 					</ul>
 				</li>

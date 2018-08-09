@@ -268,7 +268,7 @@ function _get_excerpt($limit = 120,$after = '...'){
  * Open Article Links In New Tab
  */
 function _post_target_blank(){
-	return im('target_blank')?'target="_blank"':'';
+	return im('target_blank')?' target="_blank"':'';
 }
 /**
  * thumbnail

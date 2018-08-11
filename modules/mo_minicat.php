@@ -19,5 +19,6 @@ function mo_minicat(){
 			echo '<p class="note">'._get_excerpt().'</p>';
 		    echo '</article>';
 		endwhile;
+		wp_reset_postdata();
 	endif;
 }

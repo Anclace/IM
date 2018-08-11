@@ -833,7 +833,7 @@ function _get_time_ago($ptime) {
 		}
 	};
 }
-#HTTPS
+#Get Current Page Url
 function curPageURL() {
     $pageURL = 'http';
     if (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on") 

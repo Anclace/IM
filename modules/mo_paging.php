@@ -4,7 +4,7 @@
  * @return [type] [description]
  */
 function mo_paging() {
-    $p = 3;
+    $p = 3;//步长
     if ( is_singular() ) return;
     global $wp_query, $paged;
     $max_page = $wp_query->max_num_pages;
@@ -13,7 +13,6 @@ function mo_paging() {
     if ( empty( $paged ) ) $paged = 1;
     // echo '<span class="pages">Page: ' . $paged . ' of ' . $max_page . ' </span> '; 
     echo '<li class="prev-page">'; previous_posts_link('上一页'); echo '</li>';
-
     if ( $paged > $p + 1 ) _paging_link( 1, '<li>第一页</li>' );
     if ( $paged > $p + 2 ) echo "<li><span>···</span></li>";
     for( $i = $paged - $p; $i <= $paged + $p; $i++ ) { 
@@ -25,7 +24,6 @@ function mo_paging() {
     echo '<li><span>共 '.$max_page.' 页</span></li>';
     echo '</ul></div>';
 }
-
 function _paging_link( $i, $title = '' ) {
     if ( $title == '' ) $title = "第 {$i} 页";
     echo "<li><a href='", esc_html( get_pagenum_link( $i ) ), "'>{$i}</a></li>";

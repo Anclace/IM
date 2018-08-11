@@ -347,7 +347,7 @@ function optionsframework_options() {
 	$options[] = array(
 		'name' => __('图片排序','im'),
 		'desc' => __('数字间空格隔开，默认1 2 3 4 5','im'),
-		'id'   => 'carousel_figure_order',
+		'id'   => 'focusslide_sort',
 		'std'  => '1 2 3 4 5',
 		'type' => 'text',
 		'class'=> 'carousel_figure_hidden'
@@ -358,7 +358,7 @@ function optionsframework_options() {
 		$options[] = array(
 			'name' => __('图片','im').$i,
 			'desc' => __('图片标题','im'),
-			'id'   => 'carousel_figure_item_title_'.$i,
+			'id'   => 'focusslide_title_'.$i,
 			'std'  => 'IM',
 			'type' => 'text',
 			'class'=> 'carousel_figure_hidden'
@@ -366,7 +366,7 @@ function optionsframework_options() {
 		// Carousel Figure Item Link
 		$options[] = array(
 			'desc' => __('链接地址','im'),
-			'id'   => 'carousel_figure_item_link_'.$i,
+			'id'   => 'focusslide_href_'.$i,
 			'std'  => 'http://www.webzgq.com',
 			'type' => 'text',
 			'class'=> 'carousel_figure_hidden'
@@ -374,7 +374,7 @@ function optionsframework_options() {
 		// Carousel Figure Item Image
 		$options[] = array(
 			'desc' => __('图片上传（820*200）','im'),
-			'id'   => 'carousel_figure_item_image_'.$i,
+			'id'   => 'focusslide_src_'.$i,
 			'std'  => $imagepath.'xiu.jpg',
 			'type' => 'upload',
 			'class'=> 'carousel_figure_hidden'
@@ -382,7 +382,7 @@ function optionsframework_options() {
 		// Carousel Figure Item Open Style
 		$options[] = array(
 			'desc' => __('新窗口打开','im'),
-			'id'   => 'carousel_figure_item_open_'.$i,
+			'id'   => 'focusslide_blank_'.$i,
 			'type' => 'checkbox',
 			'class'=> 'carousel_figure_hidden'
 		);

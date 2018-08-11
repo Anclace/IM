@@ -430,6 +430,19 @@ function admin_footer () {
 }
 add_filter('admin_footer_text', 'admin_footer');
 /*
+ * Override a default filter for 'textarea' sanitization and use a different one.
+ * Because the original one filters some tags of html and script in section 分享代码
+ * NOTE:This action influences all textareas
+ */
+add_action('admin_init','change_textarea_santiziation', 100);
+function change_textarea_santiziation() {
+	remove_filter( 'of_sanitize_textarea', 'of_sanitize_textarea' );
+	add_filter( 'of_sanitize_textarea', 'new_sanitize_textarea' );
+}
+function new_sanitize_textarea($input) {
+	return $input;
+}
+/*
  * This is an example of how to add custom scripts to the options panel.
  * This one shows/hides the an option when a checkbox is clicked.
  *

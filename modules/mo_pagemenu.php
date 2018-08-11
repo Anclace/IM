@@ -1,12 +1,12 @@
 <?php  
-	$pagemenus = _hui('page_menu');
+	$pagemenus = im('page_left_part_menus');
 	$menus = '';
 	if( $pagemenus ){
 		$pageURL = curPageURL();
 		foreach ($pagemenus as $key => $value) {
 			if( $value ) {
 				$purl = get_permalink($key);
-				$menus .= '<li '.($purl==$pageURL?'class="active"':'').'><a href="'.$purl.'">'.get_post($key)->post_title.'</a></li>';
+				$menus .= '<li '.($purl==$pageURL?'class="active"':'').'><a href="'.$purl.'">'.get_the_title($key).'</a></li>';
 			}
 		}
 	}

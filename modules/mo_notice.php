@@ -27,6 +27,7 @@ if( is_home() && (im('notice_district')||im('user_on_notice_module')) ) {
 								while($fitposts->have_posts()):$fitposts->the_post();
 									echo '<li><time>'.get_the_time('m-d').'</time><a target="_blank" href="'.get_permalink().'">'.get_the_title().get_the_subtitle().'</a></li>';
 								endwhile;
+								wp_reset_postdata();
 							endif;
 						?>
 					</ul>

@@ -127,8 +127,8 @@ function _load_scripts(){
 				'bootstrap' => '//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js'
 			)
 		);
-		wp_register_script('jquery',im('js_cdn')?$jss[im('js_cdn')]['jquery']:$jss['localhost']['jquery'],false,THEME_VERSION,(im('jquery_bottom')?true:false));
-		wp_register_script('bootstrap',im('js_cdn')?$jss[im('js_cdn')]['bootstrap']:$jss['localhost']['bootstrap'],false,THEME_VERSION,true);
+		wp_enqueue_script('jquery',im('js_cdn')?$jss[im('js_cdn')]['jquery']:$jss['localhost']['jquery'],false,THEME_VERSION,(im('jquery_bottom')?true:false));
+		wp_enqueue_script('bootstrap',im('js_cdn')?$jss[im('js_cdn')]['bootstrap']:$jss['localhost']['bootstrap'],false,THEME_VERSION,true);
 		_jsloader(array('loader'));
 	}
 }
@@ -182,30 +182,30 @@ function _moloader($name = '',$apply = true){
 function _bodyclass(){
 	$class = '';
 	if(is_super_admin()){
-		$class .= 'logged-admin';
+		$class .= ' logged-admin';
 	}
 	if(im('nav_fixed')&&!is_page_template('pages/resetpassword.php')){
-		$class .= 'nav_fixed';
+		$class .= ' nav_fixed';
 	}
 	if(im('list_comments_r')){
-		$class .= 'list-comments-r';
+		$class .= ' list-comments-r';
 	}
 	if((is_single()||is_page())&&im('post_content_indent')){
-		$class .= 'p_indent';
+		$class .= ' p_indent';
 	}
 	if((is_single()||is_page())&&comments_open()){
-		$class .= 'comment-open';
+		$class .= ' comment-open';
 	}
 	if(im('list_type')=='text'){
-		$class .= 'list-text';
+		$class .= ' list-text';
 	}
 	if(is_category()){
 		_moloader('mo_is_minicat',false);
 		if(mo_is_minicat()){
-			$class .= 'site-minicat';
+			$class .= ' site-minicat';
 		}
 	}
-	$class .= 'site-layout-'.(im('show_sidebar')?im('show_sidebar'):'2');
+	$class .= ' site-layout-'.(im('show_sidebar')?im('show_sidebar'):'2');
 	return trim($class);
 }
 /**
@@ -385,7 +385,7 @@ function _title(){
 		$html .= $t._get_delimiter();
 	}
 	$html .= get_bloginfo('name');
-	if(is_home()){
+	if(is_home()||is_front_page()){
 		if($paged>1){
 			$html .= _get_delimiter().__('最新发布','im');
 		}else if(get_option('blogdescription')){
@@ -397,11 +397,18 @@ function _title(){
 		$cat_ID = get_query_var('cat');
 		$cat_title = get_term_meta($cat_ID,'title',true);
 		if($cat_title){
-			$html = $cat_title;
+			if($paged>1){
+				$html = $cat_title;	
+			}else {
+				$html = $cat_title._get_delimiter().get_bloginfo('name');
+			}
 		}
 	}
 	if($paged>1){
 		$html .= _get_delimiter().'第'.$paged.'页';
+		if(is_category()){
+			$html .= _get_delimiter().get_bloginfo('name');
+		}
 	}
 	return $html;
 }

@@ -52,5 +52,4 @@ tbquire.config({
 		'user'          : 'user'
 	}
 })
-
 tbquire(['main'])

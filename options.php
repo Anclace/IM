@@ -1137,7 +1137,7 @@ window._bd_share_config = {
 		"bdSize"     : "24"
     },
     share: [{
-        bdCustomStyle: "'. get_stylesheet_directory_uri() .'/css/share.css"
+        bdCustomStyle: "'. get_stylesheet_directory_uri() .'/assets/css/share.css"
     }]
 }
 with(document)0[(getElementsByTagName("head")[0]||body).appendChild(createElement("script")).src="http://bdimg.share.baidu.com/static/api/js/share.js?cdnversion="+~(-new Date()/36e5)];

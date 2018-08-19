@@ -35,7 +35,7 @@ endif;
 /**
  * post formats
  */
-add_theme_support('post_formats',array('aside'));
+add_theme_support('post-formats',array('aside'));
 /**
  * hide admin bar
  */
@@ -205,7 +205,7 @@ function _bodyclass(){
 			$class .= ' site-minicat';
 		}
 	}
-	$class .= ' site-layout-'.(im('show_sidebar')?im('show_sidebar'):'2');
+	$class .= ' site-layout-'.(im('show_sidebar')?'2':'1');
 	return trim($class);
 }
 /**

@@ -52,7 +52,7 @@
 <script>
 window.jsui={
     www: '<?php echo home_url() ?>',
-    uri: '<?php echo get_stylesheet_directory_uri() ?>',
+    uri: '<?php echo get_stylesheet_directory_uri().'/assets' ?>',
     ver: '<?php echo THEME_VERSION ?>',
 	roll: <?php echo $roll ?>,
     ajaxpager: '<?php echo im("ajaxpager") ?>',

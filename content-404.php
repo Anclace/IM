@@ -1,6 +1,6 @@
 <section class="container">
 	<div class="f404">
-		<img src="<?php echo get_stylesheet_directory_uri() ?>/img/404.png">
+		<img src="<?php echo get_stylesheet_directory_uri() ?>/assets/images/404.png">
 		<h1>404 . Not Found</h1>
 		<h2>沒有找到你要的内容！</h2>
 		<p>

@@ -18,5 +18,4 @@ if( $paged && $paged > 1 ){
 	</div>
 	<?php get_sidebar(); ?>
 </section>
-
 <?php get_footer(); ?>

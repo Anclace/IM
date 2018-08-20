@@ -306,12 +306,12 @@ function _get_post_thumbnail($size = 'thumbnail',$class = 'thumb'){
 	}
 	if($r_src){
 		if(im('ajax_thumbnail')){
-			return sprintf('<img data-src="%s" alt="%s" src="%s" class="'.$class.'">', $r_src, $post->post_title._get_delimiter().get_bloginfo('name'), get_stylesheet_directory_uri().'/img/thumbnail.png');
+			return sprintf('<img data-src="%s" alt="%s" src="%s" class="'.$class.'">', $r_src, $post->post_title._get_delimiter().get_bloginfo('name'), get_stylesheet_directory_uri().'/assets/images/thumbnail.png');
 		}else{
 			return sprintf('<img src="%s" alt="%s" class="'.$class.'">', $r_src, $post->post_title._get_delimiter().get_bloginfo('name'));
 		}
 	}else{
-		return sprintf('<img data-thumb="default" src="%s" class="'.$class.'">', get_stylesheet_directory_uri().'/img/thumbnail.png');
+		return sprintf('<img data-thumb="default" src="%s" class="'.$class.'">', get_stylesheet_directory_uri().'/assets/images/thumbnail.png');
 	}
 }
 #获取文件类型

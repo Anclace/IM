@@ -1942,17 +1942,16 @@ pre.prettyprint.linenums ol li {
 .prettyprint .pln { color: #66D9EF; }
 
 
-
-
-
-
 .image-container{
 	text-align: center;
-	padding-top: 15px;
-	padding-bottom: 15px;
+	padding: 15px;
+    background-color: #fff;
+    border: 1px solid #eaeaea;
+    border-radius: 4px;
+    margin-bottom: 15px!important;
 }
 .image-header{
-	margin-bottom: 30px;
+	padding: 25px 0;
 }
 .image-title{
 	margin: 0 0 10px;
@@ -1962,6 +1961,8 @@ pre.prettyprint.linenums ol li {
 }
 .image-content img{
 	height: auto;
+	border-radius: 3px;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
 }
 .image-navigation{
 	margin-top: 30px;
@@ -1978,9 +1979,15 @@ pre.prettyprint.linenums ol li {
 .image-navigation a:hover{
 	opacity:0.8;
 }
-.image-caption, .image-description{
+.image-caption {
+	font-style: italic;
+	color: #757575;
+	font-size: 12px;
+	margin:10px auto 0;
+}
+.image-description{
 	margin: 0 auto 30px;
-	max-width: 600px;
+	text-align: left;
 }
 
 

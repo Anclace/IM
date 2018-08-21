@@ -20,7 +20,7 @@ while ( have_posts() ) : the_post();
         echo '<header>';
             if( im('post_widgets')['catlink'] && !is_category() ) {
                 $category = get_the_category();
-                if($category[0]){
+                if(! empty($category)){
                     echo '<a class="cat" href="'.get_category_link($category[0]->term_id ).'">'.$category[0]->cat_name.'<i></i></a> ';
                 }
             };
@@ -40,10 +40,8 @@ while ( have_posts() ) : the_post();
         if( im('post_widgets')['views'] ){
             echo '<span class="pv"><i class="fa fa-eye"></i>'._get_post_views().'</span>';
         }
-   
-
         if ( comments_open() && im('post_widgets')['comments'] ) {
-            echo '<a class="pc" href="'.get_comments_link().'"><i class="fa fa-comments-o"></i>评论('.get_comments_number('0', '1', '%').')</a>';
+            echo '<a class="pc" href="'.get_comments_link().'"><i class="fa fa-comments-o"></i>'._get_post_comments().'</a>';
         }
         echo '</p>';
         echo '<p class="note">'._get_excerpt().'</p>';

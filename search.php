@@ -1,13 +1,11 @@
 <?php 
 get_header();
-
 if( !have_posts() ){
 	get_template_part( 'content-404' ); 
 	get_footer();
 	exit;
 }
 ?>
-
 <section class="container">
 	<div class="content-wrap">
 		<div class="content">
@@ -18,5 +16,4 @@ if( !have_posts() ){
 	</div>
 	<?php get_sidebar(); ?>
 </section>
-
 <?php get_footer(); ?>

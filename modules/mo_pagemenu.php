@@ -10,7 +10,6 @@
 			}
 		}
 	}
-
 ?>
 <div class="pageside">
 	<div class="pagemenus">

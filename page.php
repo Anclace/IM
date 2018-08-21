@@ -1,6 +1,6 @@
 <?php get_header(); ?>
 <section class="container container-page">
-	<?php _moloader('mo_pagemenu', false) ?>
+	<?php _moloader('mo_pagemenu', false); ?>
 	<div class="content">
 		<?php while (have_posts()) : the_post(); ?>
 		<header class="article-header">

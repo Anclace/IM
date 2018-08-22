@@ -49,4 +49,4 @@ while ( have_posts() ) : the_post();
     echo '</article>';
 endwhile; 
 _moloader('mo_paging');
-//wp_reset_query();
+wp_reset_query();

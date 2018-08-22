@@ -1944,14 +1944,14 @@ pre.prettyprint.linenums ol li {
 
 .image-container{
 	text-align: center;
-	padding: 15px;
+	padding: 0 15px;
     background-color: #fff;
     border: 1px solid #eaeaea;
     border-radius: 4px;
     margin-bottom: 15px!important;
 }
 .image-header{
-	padding: 25px 0;
+	padding: 25px 0 15px;
 }
 .image-title{
 	margin: 0 0 10px;

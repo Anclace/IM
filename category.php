@@ -49,7 +49,7 @@ $description = trim(strip_tags(category_description()));
 					    echo '</article>';
 					endwhile; 
 					_moloader('mo_paging');
-					//wp_reset_query();
+					wp_reset_query();
 				}else{
 					echo '<div class="pagetitle"><h1>', single_cat_title(), '</h1>'.$pagedtext.'</div>';
 					get_template_part( 'excerpt' ); 

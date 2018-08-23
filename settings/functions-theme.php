@@ -3,22 +3,65 @@ error_reporting(E_ALL);
 ini_set("display_errors",1);
 
 define('THEME_VERSION','1.0');
-#######################################################
-# BASIC
-#######################################################
-/**
- * require widgets
- */
+// require widgets
 require_once get_stylesheet_directory() . '/widgets/widget-index.php';
-/**
- * require functions for admin
- */
+// require functions for admin
 if(is_admin()){
 	require_once get_stylesheet_directory().'/settings/functions-admin.php';
 }
-/**
- * function im to get option value
- */
+#######################################################
+# Remove redundant codes
+# https://developer.wordpress.org/reference/hooks/wp_head/
+#######################################################
+#Removes links to the general feeds: Post and Comment Feed
+// remove_action('wp_head', 'feed_links', 2); 
+
+#Removes the links to the extra feeds such as category feeds
+// remove_action('wp_head', 'feed_links_extra', 3);
+
+#RSD是一个广义的接口，wlwmanifest是针对微软Live Writer编辑器的。如果你不需要离线编辑，可移除之。即便你需要使用离线编辑器，大部分时候也不需要这两行代码，而且可能会留有安全隐患
+#Removes the link to the Really Simple Discovery service endpoint, EditURI link【主要供远程发布使用】
+remove_action('wp_head', 'rsd_link'); 
+#Removes the link to the Windows Live Writer manifest file.【主要供远程发布使用】
+remove_action('wp_head', 'wlwmanifest_link'); 
+
+#Removes the index link
+// remove_action('wp_head', 'index_rel_link'); 
+
+#Removes the prev link
+// remove_action('wp_head', 'parent_post_rel_link', 10, 0);  
+
+#Removes the start link
+// remove_action('wp_head', 'start_post_rel_link', 10, 0); 
+
+#Removes the relational links for the posts adjacent to the current post.
+// remove_action('wp_head', 'adjacent_posts_rel_link_wp_head', 10, 0); 
+
+#移除Canonical标记
+//remove_action('wp_head', 'rel_canonical');
+
+#removes shortlink.
+//remove_action('wp_head', 'wp_shortlink_wp_head');  
+
+#Removes the XHTML generator that is generated on the wp_head hook, WP version
+remove_action('wp_head', 'wp_generator'); 
+#WordPress Emoji Delete
+remove_action( 'admin_print_scripts' ,  'print_emoji_detection_script');
+remove_action( 'admin_print_styles'  ,  'print_emoji_styles');
+remove_action( 'wp_head'             ,  'print_emoji_detection_script', 7);
+remove_action( 'wp_print_styles'     ,  'print_emoji_styles');
+remove_filter( 'the_content_feed'    ,  'wp_staticize_emoji');
+remove_filter( 'comment_text_rss'    ,  'wp_staticize_emoji');
+remove_filter( 'wp_mail'             ,  'wp_staticize_emoji_for_email');
+// smilies src
+add_filter('smilies_src','_smilies_src',1,10);
+function _smilies_src($img_src,$img,$siteurl){
+	return get_stylesheet_directory_uri().'/assets/images/smilies/'.$img;
+}
+#######################################################
+# BASIC
+#######################################################
+// function im to get option value
 if ( ! function_exists( 'im' ) ) :
 function im( $name, $default = false ) {
 	$config = get_option( 'optionsframework' );
@@ -32,20 +75,14 @@ function im( $name, $default = false ) {
 	return $default;
 }
 endif;
-/**
- * post formats
- */
+// post formats
 add_theme_support('post-formats',array('aside'));
-/**
- * hide admin bar
- */
+// hide admin bar
 add_filter('show_admin_bar', 'hide_admin_bar');
 function hide_admin_bar($flag) {
 	return false;
 }
-/**
- * no self pingback
- */
+// no self pingback
 add_action('pre_ping','noself_ping');
 function noself_ping($links){
 	$home = get_option('home');
@@ -55,25 +92,14 @@ function noself_ping($links){
 		}
 	}
 }
-/**
- * smilies src
- */
-add_filter('smilies_src','_smilies_src',1,10);
-function _smilies_src($img_src,$img,$siteurl){
-	return get_stylesheet_directory_uri().'/assets/images/smilies/'.$img;
-}
-/**
- * register nav-menu
- */
+// register nav-menu
 if(function_exists('register_nav_menus')){
 	register_nav_menus(array(
 		'nav'     => __('网站导航','im'),
 		'topmenu' => __('顶部菜单','im')
 	));
 }
-/**
- * register sidebar
- */
+// register sidebar
 if(function_exists('register_sidebar')){
 	$sidebars = array(
 		'public_header' => __('公共头部','im'),
@@ -147,10 +173,6 @@ function _jsloader($arr){
 	}
 }
 #######################################################
-# Remove redundant codes
-#######################################################
-
-#######################################################
 # HEADER
 #######################################################
 add_action('wp_head','_the_header');
@@ -165,9 +187,6 @@ function _the_header(){
 # FOOTER
 #######################################################
 add_action('wp_footer','_the_footer');
-/**
- * 
- */
 #######################################################
 # Basic Settings
 #######################################################
@@ -208,23 +227,17 @@ function _bodyclass(){
 	$class .= ' site-layout-'.(im('show_sidebar')?'2':'1');
 	return trim($class);
 }
-/**
- * nav-menu
- */
+// nav-menu
 function _the_menu($location = 'nav'){
 	echo str_replace("</ul></div>", "", preg_replace("/<div[^>]*><ul[^>]*>/", "", wp_nav_menu(array('theme_location'=>$location,'echo'=>false))));
 }
-/**
- * logo
- */
+// logo
 function _the_logo(){
 	$tag = is_home()?'h1':'div';
 	$site_name = get_bloginfo('name').(get_bloginfo('description')?_get_delimiter().get_bloginfo('description'):'');
 	echo '<'.$tag.' class="logo"><a href="'.get_bloginfo('url').'" title="'.$site_name.'"><img src="'.im('logo_src').'" alt="'.$site_name.'">'.get_bloginfo('name').'</a></'.$tag.'>';
 }
-/**
- * 阅读量
- */
+// 阅读量
 function _post_views_record(){
 	if(is_singular()){
 		global $post;
@@ -243,15 +256,11 @@ function _get_post_views($before = '阅读(',$after = ')'){
 	$views = (int)get_post_meta($post_ID,'views',true);
 	return $before.$views.$after;
 }
-/**
- * 评论数
- */
+// 评论数
 function _get_post_comments($before = '评论(',$after = ')'){
 	return $before.get_comments_number_text('0','1','%').$after;
 }
-/**
- * Excerpt
- */
+// Excerpt
 add_filter('excerpt_length','_excerpt_length');
 function _excerpt_length($length){
 	return 120;
@@ -264,15 +273,11 @@ function _get_excerpt($limit = 120,$after = '...'){
 		return $excerpt;
 	}
 }
-/**
- * Open Article Links In New Tab
- */
+// Open Article Links In New Tab
 function _post_target_blank(){
 	return im('target_blank')?' target="_blank"':'';
 }
-/**
- * thumbnail
- */
+// thumbnail
 add_theme_support('post-thumbnails');
 set_post_thumbnail_size(220, 150, true);
 function _get_post_thumbnail($size = 'thumbnail',$class = 'thumb'){
@@ -345,15 +350,11 @@ function _post_copyright($content) {
 #######################################################
 # SEO
 #######################################################
-/**
- * hythen
- */
+// hythen
 function _get_delimiter(){
 	return im('hythen')?im('hythen'):'-';
 }
-/**
- * subtitle
- */
+// subtitle
 function get_the_subtitle($span=true){
 	global $post;
 	$post_ID = $post->ID;
@@ -412,9 +413,7 @@ function _title(){
 	}
 	return $html;
 }
-/**
- * keywords
- */
+// keywords
 function _the_keywords(){
 	global $new_keywords;
 	if($new_keywords){
@@ -457,9 +456,7 @@ function _the_keywords(){
 		echo "<meta name=\"keywords\" content=\"{$keywords}\" />\n";
 	}
 }
-/**
- * description
- */
+// description
 function _the_description(){
 	global $new_description;
 	if($new_description){
@@ -503,9 +500,7 @@ function _the_description(){
 		echo "<meta name=\"description\" content=\"$description\" />\n";	
 	}	
 }
-/**
- * no category base in url
- */
+// no category base in url
 if(im('no_cat_in_url')&&!function_exists('no_category_base_refresh_rules')){
 	/* hooks */
 	register_activation_hook(__FILE__,    'no_category_base_refresh_rules');

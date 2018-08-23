@@ -34,26 +34,6 @@
 					} 
 				?>
 			</div>
-			<?php  
-				$args = array(
-				    'ignore_sticky_posts' => 1,
-				    'paged' => $paged
-				);
-				if( im('ignore_articles_cat') ){
-					$pool = array();
-					foreach (im('ignore_articles_cat') as $key => $value) {
-						if( $value ) $pool[] = $key;
-					}
-					if(!empty($pool)){
-						$args['cat'] = '-'.implode(',-',$pool);
-					}
-				}
-				if( im('ignore_posts') ){
-					$pool = im('ignore_posts');
-					$args['post__not_in'] = explode("\n", $pool);
-				}
-				query_posts($args);
-			?> 
 			<?php get_template_part( 'excerpt' ); ?>
 			<?php _the_ads($name='ads_index_02', $class='asb-index asb-index-02') ?>
 		</div>

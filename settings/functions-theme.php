@@ -13,38 +13,52 @@ if(is_admin()){
 # Remove redundant codes
 # https://developer.wordpress.org/reference/hooks/wp_head/
 #######################################################
+# delete google fonts
+# 如果没有使用谷歌字体，可以不加
+# 谷歌字体已经能访问，可以去除
+/*// method 1
+if (!function_exists('remove_wp_open_sans')) :
+    function remove_wp_open_sans() {
+        wp_deregister_style( 'open-sans' );
+        wp_register_style( 'open-sans', false );
+    }
+    add_action('wp_enqueue_scripts', 'remove_wp_open_sans');
+    // Uncomment below to remove from admin
+    // add_action('admin_enqueue_scripts', 'remove_wp_open_sans');
+endif;
+// method 2
+function remove_open_sans() {    
+    wp_deregister_style( 'open-sans' );    
+    wp_register_style( 'open-sans', false );    
+    wp_enqueue_style('open-sans','');    
+}    
+add_action( 'init', 'remove_open_sans' );
+*/
+
 #Removes links to the general feeds: Post and Comment Feed
 // remove_action('wp_head', 'feed_links', 2); 
-
 #Removes the links to the extra feeds such as category feeds
 // remove_action('wp_head', 'feed_links_extra', 3);
-
 #RSD是一个广义的接口，wlwmanifest是针对微软Live Writer编辑器的。如果你不需要离线编辑，可移除之。即便你需要使用离线编辑器，大部分时候也不需要这两行代码，而且可能会留有安全隐患
 #Removes the link to the Really Simple Discovery service endpoint, EditURI link【主要供远程发布使用】
 remove_action('wp_head', 'rsd_link'); 
 #Removes the link to the Windows Live Writer manifest file.【主要供远程发布使用】
 remove_action('wp_head', 'wlwmanifest_link'); 
-
 #Removes the index link
 // remove_action('wp_head', 'index_rel_link'); 
-
 #Removes the prev link
 // remove_action('wp_head', 'parent_post_rel_link', 10, 0);  
-
 #Removes the start link
 // remove_action('wp_head', 'start_post_rel_link', 10, 0); 
-
 #Removes the relational links for the posts adjacent to the current post.
 // remove_action('wp_head', 'adjacent_posts_rel_link_wp_head', 10, 0); 
-
 #移除Canonical标记
 //remove_action('wp_head', 'rel_canonical');
-
 #removes shortlink.
 //remove_action('wp_head', 'wp_shortlink_wp_head');  
-
 #Removes the XHTML generator that is generated on the wp_head hook, WP version
 remove_action('wp_head', 'wp_generator'); 
+
 #WordPress Emoji Delete
 remove_action( 'admin_print_scripts' ,  'print_emoji_detection_script');
 remove_action( 'admin_print_styles'  ,  'print_emoji_styles');

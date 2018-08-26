@@ -2374,3 +2374,110 @@ pre.prettyprint.linenums ol li {
 	#navs .item li{width: 49%;}
 }
 
+/*2018.08.26归档页*/
+#archives,.archives-item {
+    position: relative;
+    font-family: "Lucida Sans Unicode";
+}
+.archives-item ul {
+	padding: 0;
+	margin: 0;
+	border:none;
+}
+.archives-item li {
+	display: inline;
+	font-size: 14px;
+}
+.archives-item li em {
+	font-style: normal;
+}
+.archives-item li:after {
+	content: '、';
+}
+.archives-item li:last-child:after{
+	content: '';
+}
+#archives>p {
+	margin:20px 0 0 0;
+	line-height: normal;
+}
+#archives h2.archives-title,.archives-item  h2.archives-title {
+	font-size: 20px;
+    line-height: 1.8;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+    letter-spacing: 5px;
+    margin: 16px 0 8px;
+    font-weight: bold;
+}
+#archives h3 {
+    padding: 0 15px;
+    border-bottom: 1px solid #ddd;
+    font-size: 18px;
+    font-weight: 400;
+    text-align: center;
+    letter-spacing: 5px;
+    line-height:normal;
+}
+#archives ul {
+    list-style: none;
+    margin: 0 30px;
+    padding: 10px 0 20px 10px;
+    border-left: 1px solid #ddd;
+    font-size: 18px
+}
+#archives li {
+    list-style: none;
+    position: relative;
+    line-height: 30px;
+    font-size: 12px;
+}
+#archives ul ul {
+    margin: -15px 0 0 0;
+    padding: 15px 0 10px 0
+}
+#archives ul ul li {
+    padding: 0 0 0 15px
+}
+#archives ul ul li:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    border-top: 5px dashed transparent;
+    border-bottom: 5px dashed transparent;
+    border-left: 10px solid #ddd
+}
+#al_expand_collapse {
+    background:#4285f4;
+    color: #FFFFFF;
+    padding: 3px 6px;
+    cursor: pointer;
+    border-radius: 3px 3px 3px 3px;
+}
+#al_expand_collapse:hover {
+    background:#ea4335;
+}
+#archives em {
+    padding-left: 5px;
+    font-size: 12px;
+    color: #777
+}
+#archives .al_mon {
+    padding-left: 5px;
+    font-size: 14px;
+    font-weight: 700
+}
+#archives .al_mon:after {
+    content: "";
+    position: absolute;
+    left: -10px;
+    top: 15px;
+    width: 10px;
+    height: 1px;
+    background: #ddd
+}
+#archives .al_mon em {
+    font-size: 12px;
+    font-weight: 400
+}

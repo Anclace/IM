@@ -1342,5 +1342,19 @@ with(document)0[(getElementsByTagName("head")[0]||body).appendChild(createElemen
 		'id'   => 'trackcode',
 		'type' => 'textarea'
 	);
+	/**
+	 * Other Settings
+	 */
+	$options[] = array(
+		'name' => __('其他','im'),
+		'type' => 'heading'
+	);
+	// Exclude these posts or pages on all-in-one archive page
+	$options[] = array(
+		'name' => __('总归档页不显示如下文章','im'),
+		'desc' => __('填写文章对应ID值，用英文逗号隔开','im'),
+		'id'   => 'archive_exlude_posts',
+		'type' => 'text'
+	);
 	return $options;
 }

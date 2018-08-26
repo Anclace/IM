@@ -3,16 +3,12 @@
  * Template name: Readers
  * Description:   A readers page
  */
-
 get_header();
-
 ?>
-
 <?php 
 function readers_wall( $outer='1',$timer='3',$limit='100' ){
 	global $wpdb;
 	$counts = $wpdb->get_results("SELECT count(comment_author) AS cnt, user_id, comment_author, comment_author_url, comment_author_email FROM $wpdb->comments WHERE comment_date > date_sub( now(), interval $timer month ) AND user_id!='1' AND comment_author!=$outer AND comment_approved='1' AND comment_type='' GROUP BY comment_author ORDER BY cnt DESC LIMIT $limit");
-
 	$i = 0;
 	$type = '';
 	foreach ($counts as $comment) {
@@ -30,16 +26,14 @@ function readers_wall( $outer='1',$timer='3',$limit='100' ){
 			$tt = '第'.$i.'名';
 		}
 		if( $i < 4 ){
-			$type .= '<a class="item-top item-'.$i.'" target="_blank" href="'. $c_url . '"><h4>【'.$tt.'】<small>评论：'. $comment->cnt . '</small></h4>'.str_replace(' src=', ' data-src=', _get_the_avatar($user_id=$comment->user_id, $user_email=$comment->comment_author_email)).'<strong>'.$comment->comment_author.'</strong>'.$c_url.'</a>';
+			$type .= '<a class="item-top item-'.$i.'" target="_blank" href="'. $c_url . '"><h4>【'.$tt.'】<small>评论：'. $comment->cnt . '</small></h4>'._get_the_avatar($user_id=$comment->user_id, $user_email=$comment->comment_author_email).'<strong>'.$comment->comment_author.'</strong>'.$c_url.'</a>';
 		}else{
-			$type .= '<a target="_blank" href="'. $c_url . '" title="【'.$tt.'】评论：'. $comment->cnt . '">'.str_replace(' src=', ' data-src=', _get_the_avatar($user_id=$comment->user_id, $user_email=$comment->comment_author_email)).$comment->comment_author.'</a>';
+			$type .= '<a target="_blank" rel="external nofollow" href="'. $c_url . '" title="【'.$tt.'】评论：'. $comment->cnt . '">'._get_the_avatar($user_id=$comment->user_id, $user_email=$comment->comment_author_email).$comment->comment_author.'</a>';
 		}
-		
 	}
 	echo $type;
 };
 ?>
-
 <div class="container container-page">
 	<?php _moloader('mo_pagemenu', false) ?>
 	<div class="content">
@@ -51,16 +45,11 @@ function readers_wall( $outer='1',$timer='3',$limit='100' ){
 			<?php the_content(); ?>
 		</article>
 		<?php endwhile;  ?>
-
 		<div class="readers">
-			<?php //readers_wall(1, 6, 100); ?>
-			<?php readers_wall(1, _hui('readwall_limit_time'), _hui('readwall_limit_number')); ?>
+			<?php readers_wall(1, im('readerwall_limit_time'), im('readerwall_limit_number')); ?>
 		</div>
-
 		<?php comments_template('', true); ?>
 	</div>
 </div>
-
 <?php
-
 get_footer();

@@ -3,12 +3,9 @@
  * Template name: User
  * Description:   A user profile page
  */
-
 get_header();
-
 ?>
-
-<?php if( !_hui('user_page_s') ) exit('该功能需要开启！'); ?>
+<?php if( !im('enable_user_center') ) exit('该功能需要开启！'); ?>
 <section class="container">
 	<div class="container-user"<?php echo is_user_logged_in()?'':' id="issignshow" style="height:500px;"' ?>>
 		<?php if( is_user_logged_in() ){ global $current_user; ?>
@@ -19,7 +16,7 @@ get_header();
 			</div>
 			<div class="usermenus">	
 				<ul class="usermenu">
-					<?php if( _hui('tougao_s') ){ ?><li class="usermenu-post-new"><a href="#post-new">发布文章</a></li><?php } ?>
+					<?php if( im('allow_user_post') ){ ?><li class="usermenu-post-new"><a href="#post-new">发布文章</a></li><?php } ?>
 					<li class="usermenu-posts"><a href="#posts/all">我的文章</a></li>
 					<li class="usermenu-comments"><a href="#comments">我的评论</a></li>
 					<li class="usermenu-info"><a href="#info">修改资料</a></li>
@@ -32,12 +29,12 @@ get_header();
 			<div class="user-main">
 				
 			</div>
-			<?php if( _hui('tougao_s') ){ ?>
+			<?php if( im('allow_user_post') ){ ?>
 				<div class="user-main-postnew" style="display:none">
 					<form class="user-postnew-form">
 					  	<ul class="user-meta user-postnew">
-					  		<li><label>标题</label>
-								<input type="text" class="form-control" name="post_title" placeholder="文章标题">
+					  		<li><label for="post_title">标题</label>
+								<input type="text" class="form-control" name="post_title" placeholder="文章标题" id="post_title">
 					  		</li>
 					  		<li><label>内容</label>
 					  			<?php
@@ -50,15 +47,15 @@ get_header();
 										'quicktags' => false,
 										'editor_css'    => '',
 										'tinymce'       => array(
-											'content_css' => get_stylesheet_directory_uri() . '/css/user-editor-style.css'
+											'content_css' => get_stylesheet_directory_uri() . '/assets/css/user-editor-style.css'
 										),
 										'teeny' => true,
 									);
 									wp_editor( $content, $editor_id, $settings );
 								?>
 					  		</li>
-					  		<li><label>来源链接</label>
-								<input type="text" class="form-control" name="post_url" placeholder="文章来源链接">
+					  		<li><label for="post_source">来源链接</label>
+								<input type="text" class="form-control" name="post_url" placeholder="文章来源链接" id="post_source">
 					  		</li>
 					  		<li>
 					  			<br>

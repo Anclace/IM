@@ -1,6 +1,6 @@
 <?php 
 /**
- * Template name: Archives
+ * Template name: 归档页[旧版本]
  * Description:   A archives page,有个缺点是不能计数
  */
 get_header();

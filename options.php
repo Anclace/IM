@@ -576,8 +576,8 @@ function optionsframework_options() {
 	);
 	// Friend Links Categories
 	$options[] = array(
-		'name' => __('友情链接分类选择','im'),
-		'desc' => __('友情链接分类选择','im'),
+		'name' => __('友情链接分类选择(用於友情鏈接頁面)','im'),
+		'desc' => __('友情链接分类选择(用於友情鏈接頁面)','im'),
 		'id'   => 'friend_links_cat',
 		'type' => 'multicheck',
 		'options' => $options_linkcats
@@ -644,8 +644,8 @@ function optionsframework_options() {
 	);
 	// Friend Links From Which Link Categories
 	$options[] = array(
-		'name' => __('选择一个友链的链接分类','im'),
-		'desc' => __('选择一个友链的链接分类','im'),
+		'name' => __('选择一个友链的链接分类(站點底部用)','im'),
+		'desc' => __('选择一个友链的链接分类(站點底部用)','im'),
 		'id'   => 'bottom_flinks_cat',
 		'type' => 'select',
 		'class'=> 'bottom_flinks_hidden',

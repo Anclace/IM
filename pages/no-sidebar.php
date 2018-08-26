@@ -3,9 +3,7 @@
  * Template name: No sidebar page
  * Description:   A no sidebar page
  */
-
 get_header();
-
 ?>
 <div class="container container-no-sidebar">
 	<div class="content">
@@ -20,7 +18,5 @@ get_header();
 		<?php comments_template('', true); ?>
 	</div>
 </div>
-
 <?php
-
 get_footer();

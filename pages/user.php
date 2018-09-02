@@ -71,17 +71,13 @@ get_header();
 		<?php } ?>
 	</div>
 </section>
-
 <?php if( is_user_logged_in() ){ ?>
-
 <script id="temp-postnew" type="text/x-jsrender">
 	
 </script>
-
 <script id="temp-postmenu" type="text/x-jsrender">
 	<a href="#posts/{{>name}}">{{>title}}<small>({{>count}})</small></a>
 </script>
-
 <script id="temp-postitem" type="text/x-jsrender">
 	<li>
 		<img data-src="{{>thumb}}" class="thumb">
@@ -90,7 +86,6 @@ get_header();
 		<p class="text-muted">{{>time}} &nbsp;&nbsp; 分类：{{>cat}} &nbsp;&nbsp; 阅读({{>view}}) &nbsp;&nbsp; 评论({{>comment}}) &nbsp;&nbsp; 赞({{>like}})</p>
 	</li>
 </script>
-
 <script id="temp-info" type="text/x-jsrender">
 	<form>
 	  	<ul class="user-meta">
@@ -125,7 +120,6 @@ get_header();
 	  	</ul>
 	</form>
 </script>
-
 <script id="temp-password" type="text/x-jsrender">
 	<form>
 	  	<ul class="user-meta">
@@ -145,7 +139,6 @@ get_header();
 	  	</ul>
 	</form>
 </script>
-
 <script id="temp-commentitem" type="text/x-jsrender">
 	<li>
 		<time>{{>time}}</time>
@@ -153,11 +146,8 @@ get_header();
 		<p class="text-muted">文章：<a target="_blank" href="{{>post_link}}">{{>post_title}}</a></p>
 	</li>
 </script>
-
 <?php
 }
 ?>
-
 <?php
-
 get_footer();

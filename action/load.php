@@ -1,15 +1,12 @@
 <?php 
-
 // ini_set('display_errors','On');
 require dirname(__FILE__).'/../../../../wp-load.php';
-
 $cuid = get_current_user_id();
 
-
-/*$disable_reg_keywords = _hui('user_nickname_out');
+$disable_reg_keywords = im('user_nickname_out');
 if( $disable_reg_keywords ){
 	$disable_reg_keywords = explode("\n", $disable_reg_keywords);
-}*/
+}
 
 function is_disable_username($name){
 	global $disable_reg_keywords;
@@ -36,7 +33,7 @@ function get_millisecond() {
     list($s1, $s2) = explode(' ', microtime());     
     return (float)sprintf('%.0f', (floatval($s1) + floatval($s2)) * 1000);  
 }
-
+#统计字符串长度
 function sstrlen($str,$charset='utf-8') {        
     $n = 0; $p = 0; $c = '';
     $len = strlen($str);

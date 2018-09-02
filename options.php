@@ -734,6 +734,13 @@ function optionsframework_options() {
 		'type' => 'text',
 		'class'=> 'notification_of_user_post_hidden'
 	);
+	$options[] = array(
+		'name' => __('昵称禁止关键字', 'im'),
+		'desc' => __('一行一个关键字，用户昵称将不能使用或包含这些关键字，对编辑以下职位有效', 'im'),
+		'id' => 'user_nickname_out',
+		'std' => "赌博\n博彩\n彩票\n性爱\n色情\n做爱\n爱爱\n淫秽\n傻b\n妈的\n妈b\nadmin\ntest",
+		'type' => 'textarea'
+	);
 	/**
 	 * ADs District Settings
 	 */

@@ -2,10 +2,9 @@
 if( !$_POST ){
     exit;
 }
-
 include 'load.php';
-
-if( !_hui('user_page_s') ){
+//var_dump($_POST);
+if( !im('enable_user_center') ){
     exit;
 }
 

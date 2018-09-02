@@ -1,7 +1,7 @@
 tbfine(['router', 'jsrender'], function (){
-
-	/* jsonp
+/* jsonp
  * ====================================================
+ * http://github.com/benvinegar/jquery-jsonpi
 */
 (function($) {
     $.ajaxTransport('jsonpi', function(opts, originalOptions, jqXHR) {
@@ -74,13 +74,12 @@ return {
 			rp_comment = /^#comment/,
 			rp_like = /^#like/,
 
-			ajax_url = jsui.uri+'/action/user.php',
+			ajax_url = jsui.uri.replace('/assets','')+'/action/user.php',
 
 			_msg = {
 				// 1-2位：类型；3-4位：01-69指客户端操作提示，71-99指服务端操作提示
 				1101: '该栏目下暂无数据！',
 				1079: '服务器异常，请稍候再试！',
-
 				1201: '暂无文章！',
 				1301: '暂无评论！'
 			}
@@ -88,7 +87,6 @@ return {
 		function is_comment(){
 			return rp_comment.test(location.hash) ? true : false
 		}
-
 
 		var routes = {
 			'posts/all': function(){
@@ -154,9 +152,7 @@ return {
 
 			'info': function(){
 				menuactive('info')
-
 				loading( _main )
-
 				if( !cache_userdata ){
 					$.ajax({
 						url: ajax_url,
@@ -189,27 +185,21 @@ return {
 
 			'password': function(){
 				menuactive('password')
-
 				_main.html(
 					$('#temp-password').render()
 				)
-				
 			},
 
 			'post-new': function(){
 				menuactive('post-new')
-
 				_main.html(
 					$('#temp-postnew').render()
 				)
-
 				$('.user-main').hide()
 				$('.user-main-postnew').show()
-				
 			}
 
 		}
-
 		var router = Router(routes);
 		router.configure({
 			on: function(){
@@ -226,27 +216,20 @@ return {
 			}
 		})
 		router.init();
-
 		if( !location.hash ) location.hash = _homepage
-
-
 		/* 
 		 * functions
 		 * ====================================================
 		*/
-	
 		function get_postdata(status, paged, callback){
 			menuactive('posts')
 			$('.user-postmenu a').removeClass()
-
 			loading( _main )
-
 			var datas = {
 				action: 'posts',
 				status: status,
 				paged: paged
 			}
-
 			if( !cache_postmenu ){
 				datas.first = true
 			}
@@ -258,7 +241,6 @@ return {
 				data: datas,
 				success: function(data, textStatus, xhr) {
 					// console.log( data )
-
 					if( !cache_postmenu && data.menus ){
 						cache_postmenu = data.menus
 					}
@@ -290,10 +272,8 @@ return {
 		}
 
 		function get_commentdata(paged){
-
 			menuactive('comments')
 			loading( _main )
-
 			$.ajax({
 				url: ajax_url,
 				type: 'POST',
@@ -304,7 +284,6 @@ return {
 				},
 				success: function(data, textStatus, xhr) {
 					// console.log( data )
-
 					if( data.items ){
 						_main.html( '<ul class="user-commentlist"></ul>' )
 						$('.user-commentlist').html(
@@ -336,12 +315,11 @@ return {
 			tbquire(['lazyload'], function(){
 				$('.user-main .thumb').lazyload({
 			        data_attribute: 'src',
-			        placeholder: jsui.uri + '/img/thumbnail.png',
+			        placeholder: jsui.uri + '/images/thumbnail.png',
 			        threshold: 400
 			    });
 		    });
 		}
-
 
 		function paging(max, current, plink, step) {
 			var show = 2
@@ -349,7 +327,6 @@ return {
 		    if ( max <= step ) return;
 		    max = Math.ceil(max/step)
 		    var html = '<div class="pagination user-pagination"><ul>'
-
 		    if ( !current ) current = 1
 		    current = Number(current)
 		    if ( current > show + 1 ) html += '<li><a href="'+plink+'1">1</a></li>'
@@ -369,7 +346,6 @@ return {
 		    return html
 		}
 
-
 		var _tipstimer
 		function tips(str){
 		    if( !str ) return false
@@ -383,8 +359,6 @@ return {
 		        }, 220)
 		    }, 5000)
 		}
-
-
 
 		/* click event
 		 * ====================================================

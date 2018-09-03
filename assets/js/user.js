@@ -64,8 +64,9 @@ return {
 		var 
 			_iframe = $('#contentframe'),
 			_main = $('.user-main'),
-			_homepage = 'comments',
+			_homepage = 'comments/all',
 			cache_postmenu = null,
+			cache_commentmenu = null,
 			cache_userdata = null,
 			cache_orderdata = null,
 			cache_coupondata = null,
@@ -143,11 +144,39 @@ return {
 				$('.user-postmenu a:eq(5)').addClass('active')
 			},
 
-			'comments': function(){
-				get_commentdata(1)
+			'comments/all': function(){
+				get_commentdata('all',1)
 			},
-			'comments/:paged': function(paged){
-				get_commentdata(paged)
+			'comments/all/:paged': function(paged){
+				get_commentdata('all',paged)
+			},
+
+			'comments/approve': function(){
+				get_commentdata('approve',1)
+			},
+			'comments/approve/:paged': function(paged){
+				get_commentdata('approve',paged)
+			},
+
+			'comments/hold': function(){
+				get_commentdata('hold',1)
+			},
+			'comments/hold/:paged': function(paged){
+				get_commentdata('hold',paged)
+			},
+
+			'comments/spam': function(){
+				get_commentdata('spam',1)
+			},
+			'comments/spam/:paged': function(paged){
+				get_commentdata('spam',paged)
+			},
+
+			'comments/trash': function(){
+				get_commentdata('trash',1)
+			},
+			'comments/trash/:paged': function(paged){
+				get_commentdata('trash',paged)
 			},
 
 			'info': function(){
@@ -205,6 +234,8 @@ return {
 			on: function(){
 				if( location.hash.indexOf('posts/')<=0 ){
 					$('.user-postmenu').remove()
+				}else if( location.hash.indexOf('comments/')<=0 ){
+					$('.user-commentmenu').remove()
 				}
 			},
 			before: function(){
@@ -266,24 +297,38 @@ return {
 			});
 		}
 
-		function get_commentdata(paged){
+		function get_commentdata(status,paged){
 			menuactive('comments')
 			loading( _main )
+			var datas = {
+				action: 'comments',
+				status: status,
+				paged: paged
+			}
+			if(!cache_commentmenu){
+				datas.first = true
+			}
 			$.ajax({
 				url: ajax_url,
 				type: 'POST',
 				dataType: 'json',
-				data: {
-					action: 'comments',
-					paged: paged
-				},
+				data: datas,
 				success: function(data, textStatus, xhr) {
 					// console.log( data )
+					if(!cache_commentmenu&&data.menus){
+						cache_commentmenu = data.menus
+					}
+					if( (cache_commentmenu || (!cache_commentmenu && data.menus)) && !$('.user-commentmenu').length ){
+						_main.before( '<div class="user-commentmenu"></div>' )
+						$('.user-commentmenu').html(
+							$('#temp-commentmenu').render( cache_commentmenu || data.menus )
+						)
+					}
 					if( data.items ){
 						_main.html( '<ul class="user-commentlist"></ul>' )
 						$('.user-commentlist').html(
 							$('#temp-commentitem').render( data.items )
-						).after( paging(data.max, paged, '#comments/') )
+						).after( paging(data.max, paged, '#comments/'+status+'/') )
 					}else{
 						loading(_main, _msg['1301'])
 					}

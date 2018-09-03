@@ -129,7 +129,7 @@ switch ($ui['action']) {
         }
         $postsargs = array(
             'ignore_sticky_posts' => 1,
-            'showposts' => 10,
+            'posts_per_page' => 10,
             'paged' => $ui['paged'],
             'orderby' => 'date',
             'author' => $cuid,
@@ -287,9 +287,28 @@ switch ($ui['action']) {
         exit(); 
         break;
 	case 'comments':
-		$count = u_comment_count();
+        $comments_status = array('all','approve','hold','spam','trash');
+        if(!in_array($ui['status'], $comments_status)) 
+            die('o');
+        $com_status = $ui['status'];
+        $com_args = array(
+            'user_id' => $cuid,
+            'number' => 10,
+            'paged'  => $ui['paged'],
+            'status' => $com_status
+        );
+        if(isset($ui['first'])){
+            $printr['menus'] = array(
+                array('name' => 'all','title' => '全部','count' => u_comment_count('all')),
+                array('name' => 'approve','title' => '已通过','count' => u_comment_count('approve')),
+                array('name' => 'hold','title' => '待审','count' => u_comment_count('hold')),
+                array('name' => 'spam','title' => '垃圾','count' => u_comment_count('spam')),
+                array('name' => 'trash','title' => '回收站','count' => u_comment_count('trash'))
+            );
+        }
+		$count = u_comment_count($ui['status']);
 		if( str_is_int($ui['paged']) && $count && $ui['paged'] <= ceil($count/10) ){
-			$printr['items'] = u_comment_data($ui['paged']);
+			$printr['items'] = u_comment_data();
 			$printr['max'] = $count;
 		}
 		break;
@@ -352,14 +371,10 @@ function u_post_data(){
     return $items;
 }
 
-function u_comment_data($paged=1){
+function u_comment_data(){
+    global $com_args;
     $items = array();
-    $args = array(
-        'user_id' => get_current_user_id(),
-        'number' => 10,
-        'offset' => ($paged-1)*10
-    );
-    $comments = get_comments($args);
+    $comments = get_comments($com_args);
     foreach($comments as $comment){
         $items[] = array(
 	    	'content' => $comment->comment_content,
@@ -377,8 +392,16 @@ function u_coupon_count() {
   	return (int)$count;
 }
 
-function u_comment_count() {
+function u_comment_count($commentstatus) {
 	global $wpdb, $cuid;
-	$count = $wpdb->get_var( "SELECT COUNT(1) FROM $wpdb->comments WHERE user_id={$cuid}" );
+    if($commentstatus=='all'){
+        $count = $wpdb->get_var( "SELECT COUNT(1) FROM $wpdb->comments WHERE user_id={$cuid}" );
+    }else if($commentstatus=='approve'){
+        $count = $wpdb->get_var( "SELECT COUNT(1) FROM $wpdb->comments WHERE user_id={$cuid} AND comment_approved='1'" );
+    }else if($commentstatus=='hold'){
+        $count = $wpdb->get_var( "SELECT COUNT(1) FROM $wpdb->comments WHERE user_id={$cuid} AND comment_approved='0'" );
+    }else{
+        $count = $wpdb->get_var( "SELECT COUNT(1) FROM $wpdb->comments WHERE user_id={$cuid} AND comment_approved='{$commentstatus}'" );
+    }
   	return (int)$count;
 }

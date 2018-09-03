@@ -18,7 +18,7 @@ get_header();
 				<ul class="usermenu">
 					<?php if( im('allow_user_post') ){ ?><li class="usermenu-post-new"><a href="#post-new">发布文章</a></li><?php } ?>
 					<li class="usermenu-posts"><a href="#posts/all">我的文章</a></li>
-					<li class="usermenu-comments"><a href="#comments">我的评论</a></li>
+					<li class="usermenu-comments"><a href="#comments/all">我的评论</a></li>
 					<li class="usermenu-info"><a href="#info">修改资料</a></li>
 					<li class="usermenu-password"><a href="#password">修改密码</a></li>
 					<li class="usermenu-signout"><a href="<?php echo wp_logout_url(home_url()) ?>">退出</a></li>
@@ -138,6 +138,9 @@ get_header();
 	  		</li>
 	  	</ul>
 	</form>
+</script>
+<script id="temp-commentmenu" type="text/x-jsrender">
+	<a href="#comments/{{>name}}">{{>title}}<small>({{>count}})</small></a>
 </script>
 <script id="temp-commentitem" type="text/x-jsrender">
 	<li>

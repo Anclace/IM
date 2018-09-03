@@ -274,6 +274,13 @@ function _get_post_views($before = '阅读(',$after = ')'){
 function _get_post_comments($before = '评论(',$after = ')'){
 	return $before.get_comments_number_text('0','1','%').$after;
 }
+// 赞
+function _get_post_like_number($before = '赞(',$after = ')'){
+    global $post;
+    $post_ID = $post->ID;
+    $likes = (int)get_post_meta( $post_ID, 'like', true );
+    return $before.$likes.$after;
+}
 // Excerpt
 add_filter('excerpt_length','_excerpt_length');
 function _excerpt_length($length){

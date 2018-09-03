@@ -233,7 +233,6 @@ return {
 			if( !cache_postmenu ){
 				datas.first = true
 			}
-
 			$.ajax({
 				url: ajax_url,
 				type: 'POST',
@@ -244,25 +243,21 @@ return {
 					if( !cache_postmenu && data.menus ){
 						cache_postmenu = data.menus
 					}
-
 					if( (cache_postmenu || (!cache_postmenu && data.menus)) && !$('.user-postmenu').length ){
 						_main.before( '<div class="user-postmenu"></div>' )
 						$('.user-postmenu').html(
 							$('#temp-postmenu').render( cache_postmenu || data.menus )
 						)
 					}
-
 					if( data.items ){
 						_main.html('<ul class="user-postlist"></ul>')
 						$('.user-postlist').html(
 							$('#temp-postitem').render( data.items )
 						).after( paging(data.max, paged, '#posts/'+status+'/') )
-						
 						thumb_lazyload()
 					}else{
 						loading(_main, _msg['1201'])
 					}
-
 					callback && callback()
 				},
 				error: function(xhr, textStatus, errorThrown) {

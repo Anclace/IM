@@ -3,7 +3,7 @@ if( !$_POST ){
     exit;
 }
 include 'load.php';
-//var_dump($_POST);
+ // var_dump($_POST);
 if( !im('enable_user_center') ){
     exit;
 }
@@ -124,11 +124,10 @@ switch ($ui['action']) {
         if( $ui['status'] == 'all' ){
             $post_status = $status_all;
         }else{
-            if( !in_array($ui['status'], $status_all) ) die('a');
+            if( !in_array($ui['status'], $status_all) ) die('n');
             $post_status = $ui['status'];
         }
-
-        $args = array(
+        $postsargs = array(
             'ignore_sticky_posts' => 1,
             'showposts' => 10,
             'paged' => $ui['paged'],
@@ -136,8 +135,7 @@ switch ($ui['action']) {
             'author' => $cuid,
             'post_status' => $post_status
         );
-        query_posts($args);
-
+        
         if( isset($ui['first']) ){
             $printr['menus'] = array(
                 array('name' => 'all', 'title' => '全部', 'count' => u_post_count('all') ),
@@ -148,19 +146,14 @@ switch ($ui['action']) {
                 array('name' => 'trash', 'title' => '回收站', 'count' => u_post_count('trash') )
             );
         }
-
         $count = u_post_count($ui['status']);
-
         if( str_is_int($ui['paged']) && $count && $ui['paged'] <= ceil($count/10) ){
             $printr['items'] = u_post_data();
             $printr['max'] = $count;
         }
-
         break;
-
 	case 'info':
 		$udata = get_userdata( $cuid );
-
 		$printr['user'] = array(
 			'regtime' => $udata->user_registered,
 			'logname' => $udata->user_login,
@@ -171,7 +164,6 @@ switch ($ui['action']) {
 			'weixin' => get_user_meta( $cuid, 'weixin', true ),
 			'weibo' => get_user_meta( $cuid, 'weibo', true )
 		);
-
 		break;
 	case 'password.edit':
         if( !$ui['passwordold'] && !$ui['password'] && !$ui['password2'] ){
@@ -293,21 +285,14 @@ switch ($ui['action']) {
 
         print_r(json_encode(array('error'=>0)));  
         exit(); 
-        
-
         break;
-	
 	case 'comments':
-	
 		$count = u_comment_count();
-
 		if( str_is_int($ui['paged']) && $count && $ui['paged'] <= ceil($count/10) ){
 			$printr['items'] = u_comment_data($ui['paged']);
 			$printr['max'] = $count;
 		}
-
 		break;
-	
 	default:
 		# code...
 		break;
@@ -316,68 +301,55 @@ switch ($ui['action']) {
 print_r( json_encode($printr) );
 exit;
 
+function str_is_int($str)   {
+    return 0 === strcmp($str , (int)$str);
+}
+
 function u_get_thumbnail_src() {  
     global $post;
-    
     $content = _get_post_thumbnail();  
     preg_match_all('/<img.*?(?: |\\t|\\r|\\n)?src=[\'"]?(.+?)[\'"]?(?:(?: |\\t|\\r|\\n)+.*?)?>/sim', $content, $strResult, PREG_PATTERN_ORDER);  
     return $strResult[1][0];
 }
 
-function u_get_post_like_number(){
-    global $post;
-    $post_ID = $post->ID;
-    return (int)get_post_meta( $post_ID, 'like', true );
-}
-
-function u_get_views(){
-    global $post;
-    $post_ID = $post->ID;
-    return (int)get_post_meta($post_ID, 'views', true);
-}
-
-function u_post_data(){
-    $items = array();
-    while ( have_posts() ) : the_post(); 
-        $cat = '';
-        if( !is_category() ) {
-            $category = get_the_category();
-            if($category[0]){
-                $cat = $category[0]->cat_name;
-            }
-        };
-
-        $items[] = array(
-            'thumb' => u_get_thumbnail_src(),
-            'link' => get_permalink(),
-            'title' => html_entity_decode(get_the_title()),
-            'desc' => _get_excerpt(),
-            'time' => get_the_time('Y-m-d G:i'),
-            'cat' => $cat,
-            'view' => u_get_views(),
-            'comment' => (int)get_comments_number('0', '1', '%'),
-            'like' => u_get_post_like_number(),
-        );
-
-    endwhile; 
-    wp_reset_query();
-
-    return $items;
-}
-
 function u_post_count( $poststatus ) {
     global $wpdb, $cuid;
     if( $poststatus == 'all' ){
-        $count = $wpdb->get_var( "SELECT COUNT(1) FROM $wpdb->posts WHERE post_author={$cuid} AND post_type='post'" );
+        $count = $wpdb->get_var( "SELECT COUNT(1) FROM $wpdb->posts WHERE post_author={$cuid} AND post_type='post' AND post_status!='auto-draft'" );
     }else{
         $count = $wpdb->get_var( "SELECT COUNT(1) FROM $wpdb->posts WHERE post_author={$cuid} AND post_type='post' AND post_status='{$poststatus}'" );
     }
     return (int)$count;
 }
 
-
-function str_is_int($str)   {
-	return 0 === strcmp($str , (int)$str);
+function u_post_data(){
+    global $postsargs;
+    $items = array();
+    $the_query = new WP_Query($postsargs);
+    if($the_query->have_posts()){   
+        while ( $the_query->have_posts() ) : $the_query->the_post(); 
+            $cat = '';
+            if( !is_category() ) {
+                $category = get_the_category();
+                if($category[0]){
+                    $cat = $category[0]->cat_name;
+                }
+            };
+            $items[] = array(
+                'thumb' => u_get_thumbnail_src(),
+                'link' => get_permalink(),
+                'title' => html_entity_decode(get_the_title()),
+                'desc' => _get_excerpt(),
+                'time' => get_the_time('Y-m-d G:i'),
+                'cat' => $cat,
+                'view' => _get_post_views('',''),
+                'comment' => _get_post_comments('',''),
+                'like' => _get_post_like_number('',''),
+            );
+        endwhile; 
+        wp_reset_postdata();
+    }
+    return $items;
 }
 
 function u_comment_data($paged=1){

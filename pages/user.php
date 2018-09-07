@@ -76,7 +76,7 @@ get_header();
 	
 </script>
 <script id="temp-postmenu" type="text/x-jsrender">
-	<a href="#posts/{{>name}}">{{>title}}<small>({{>count}})</small></a>
+	<a href="#posts/{{>name}}" class="psub_{{>name}}">{{>title}}<small>({{>count}})</small></a>
 </script>
 <script id="temp-postitem" type="text/x-jsrender">
 	<li>
@@ -140,7 +140,7 @@ get_header();
 	</form>
 </script>
 <script id="temp-commentmenu" type="text/x-jsrender">
-	<a href="#comments/{{>name}}">{{>title}}<small>({{>count}})</small></a>
+	<a href="#comments/{{>name}}" class="csub_{{>name}}">{{>title}}<small>({{>count}})</small></a>
 </script>
 <script id="temp-commentitem" type="text/x-jsrender">
 	<li>

@@ -10,17 +10,14 @@ if( $disable_reg_keywords ){
 
 function is_disable_username($name){
 	global $disable_reg_keywords;
-
 	if( !$disable_reg_keywords || !$name ){
 		return false;
 	}
-
 	foreach ($disable_reg_keywords as $value) {
 		if( !empty($value) && is_in_str(strtolower($name), strtolower($value)) ){
 			return true;
 		}
 	}
-
 	return false;
 }
 

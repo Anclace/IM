@@ -3,7 +3,7 @@ if( !$_POST ){
     exit;
 }
 include 'load.php';
- // var_dump($_POST);
+//var_dump($_POST);
 if( !im('enable_user_center') ){
     exit;
 }
@@ -135,7 +135,6 @@ switch ($ui['action']) {
             'author' => $cuid,
             'post_status' => $post_status
         );
-        
         if( isset($ui['first']) ){
             $printr['menus'] = array(
                 array('name' => 'all', 'title' => '全部', 'count' => u_post_count('all') ),

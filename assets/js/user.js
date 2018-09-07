@@ -92,56 +92,44 @@ return {
 		var routes = {
 			'posts/all': function(){
 				get_postdata('all', 1)
-				$('.user-postmenu a:eq(0)').addClass('active')
 			},
 			'posts/all/:paged': function(paged){
 				get_postdata('all', paged)
-				$('.user-postmenu a:eq(0)').addClass('active')
 			},
 
 			'posts/publish': function(){
 				get_postdata('publish', 1)
-				$('.user-postmenu a:eq(1)').addClass('active')
 			},
 			'posts/publish/:paged': function(paged){
 				get_postdata('publish', paged)
-				$('.user-postmenu a:eq(1)').addClass('active')
 			},
 
 			'posts/future': function(){
 				get_postdata('future', 1)
-				$('.user-postmenu a:eq(2)').addClass('active')
 			},
 			'posts/future/:paged': function(paged){
 				get_postdata('future', paged)
-				$('.user-postmenu a:eq(2)').addClass('active')
 			},
 
 			'posts/pending': function(){
 				get_postdata('pending', 1)
-				$('.user-postmenu a:eq(3)').addClass('active')
 			},
 			'posts/pending/:paged': function(paged){
 				get_postdata('pending', paged)
-				$('.user-postmenu a:eq(3)').addClass('active')
 			},
 
 			'posts/draft': function(){
 				get_postdata('draft', 1)
-				$('.user-postmenu a:eq(4)').addClass('active')
 			},
 			'posts/draft/:paged': function(paged){
 				get_postdata('draft', paged)
-				$('.user-postmenu a:eq(4)').addClass('active')
 			},
 
 			'posts/trash': function(){
 				get_postdata('trash', 1)
-				$('.user-postmenu a:eq(5)').addClass('active')
 			},
 			'posts/trash/:paged': function(paged){
 				get_postdata('trash', paged)
-				$('.user-postmenu a:eq(5)').addClass('active')
 			},
 
 			'comments/all': function(){
@@ -204,7 +192,6 @@ return {
 							loading(_main, _msg['1079'])
 						}
 					});
-
 				}else{
 					_main.html(
 						$('#temp-info').render( cache_userdata )
@@ -234,7 +221,8 @@ return {
 			on: function(){
 				if( location.hash.indexOf('posts/')<=0 ){
 					$('.user-postmenu').remove()
-				}else if( location.hash.indexOf('comments/')<=0 ){
+				}
+				if( location.hash.indexOf('comments/')<=0 ){
 					$('.user-commentmenu').remove()
 				}
 			},
@@ -254,7 +242,6 @@ return {
 		*/
 		function get_postdata(status, paged, callback){
 			menuactive('posts')
-			$('.user-postmenu a').removeClass()
 			loading( _main )
 			var datas = {
 				action: 'posts',
@@ -280,6 +267,7 @@ return {
 							$('#temp-postmenu').render( cache_postmenu || data.menus )
 						)
 					}
+					sub_menuactive('p',status)
 					if( data.items ){
 						_main.html('<ul class="user-postlist"></ul>')
 						$('.user-postlist').html(
@@ -314,7 +302,6 @@ return {
 				dataType: 'json',
 				data: datas,
 				success: function(data, textStatus, xhr) {
-					// console.log( data )
 					if(!cache_commentmenu&&data.menus){
 						cache_commentmenu = data.menus
 					}
@@ -324,6 +311,7 @@ return {
 							$('#temp-commentmenu').render( cache_commentmenu || data.menus )
 						)
 					}
+					sub_menuactive('c',status)
 					if( data.items ){
 						_main.html( '<ul class="user-commentlist"></ul>' )
 						$('.user-commentlist').html(
@@ -337,11 +325,15 @@ return {
 					loading(_main, _msg['1079'])
 				}
 			});
+
 		}
 
 		function menuactive(name){
-			$('.usermenus li').removeClass('active')
-			$('.usermenu-'+name).addClass('active')
+			$('.usermenu-'+name).addClass('active').siblings().removeClass('active')
+		}
+
+		function sub_menuactive(type,name){
+			$('.'+type+'sub_'+name).addClass('active').siblings().removeClass('active')
 		}
 
 		function loading(el, msg){

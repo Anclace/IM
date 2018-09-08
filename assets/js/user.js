@@ -58,7 +58,7 @@ tbfine(['router', 'jsrender'], function (){
        };
     });
 })(jQuery);
-
+// start 
 return {
 	init: function (){
 		var 
@@ -74,6 +74,8 @@ return {
 			rp_post = /^#post\//,
 			rp_comment = /^#comment/,
 			rp_like = /^#like/,
+
+			cofftop = $('.container-user').offset().top,
 
 			ajax_url = jsui.uri.replace('/assets','')+'/action/user.php',
 
@@ -95,6 +97,7 @@ return {
 			},
 			'posts/all/:paged': function(paged){
 				get_postdata('all', paged)
+				$('html,body').animate({scrollTop: cofftop}, 500)
 			},
 
 			'posts/publish': function(){
@@ -102,6 +105,7 @@ return {
 			},
 			'posts/publish/:paged': function(paged){
 				get_postdata('publish', paged)
+				$('html,body').animate({scrollTop: cofftop}, 500)
 			},
 
 			'posts/future': function(){
@@ -109,6 +113,7 @@ return {
 			},
 			'posts/future/:paged': function(paged){
 				get_postdata('future', paged)
+				$('html,body').animate({scrollTop: cofftop}, 500)
 			},
 
 			'posts/pending': function(){
@@ -116,6 +121,7 @@ return {
 			},
 			'posts/pending/:paged': function(paged){
 				get_postdata('pending', paged)
+				$('html,body').animate({scrollTop: cofftop}, 500)
 			},
 
 			'posts/draft': function(){
@@ -123,6 +129,7 @@ return {
 			},
 			'posts/draft/:paged': function(paged){
 				get_postdata('draft', paged)
+				$('html,body').animate({scrollTop: cofftop}, 500)
 			},
 
 			'posts/trash': function(){
@@ -130,6 +137,7 @@ return {
 			},
 			'posts/trash/:paged': function(paged){
 				get_postdata('trash', paged)
+				$('html,body').animate({scrollTop: cofftop}, 500)
 			},
 
 			'comments/all': function(){
@@ -137,6 +145,7 @@ return {
 			},
 			'comments/all/:paged': function(paged){
 				get_commentdata('all',paged)
+				$('html,body').animate({scrollTop: cofftop}, 500)
 			},
 
 			'comments/approve': function(){
@@ -144,6 +153,7 @@ return {
 			},
 			'comments/approve/:paged': function(paged){
 				get_commentdata('approve',paged)
+				$('html,body').animate({scrollTop: cofftop}, 500)
 			},
 
 			'comments/hold': function(){
@@ -151,6 +161,7 @@ return {
 			},
 			'comments/hold/:paged': function(paged){
 				get_commentdata('hold',paged)
+				$('html,body').animate({scrollTop: cofftop}, 500)
 			},
 
 			'comments/spam': function(){
@@ -158,6 +169,7 @@ return {
 			},
 			'comments/spam/:paged': function(paged){
 				get_commentdata('spam',paged)
+				$('html,body').animate({scrollTop: cofftop}, 500)
 			},
 
 			'comments/trash': function(){
@@ -165,6 +177,7 @@ return {
 			},
 			'comments/trash/:paged': function(paged){
 				get_commentdata('trash',paged)
+				$('html,body').animate({scrollTop: cofftop}, 500)
 			},
 
 			'info': function(){
@@ -399,24 +412,17 @@ return {
 		    e = e || window.event;
 		    var target = e.target || e.srcElement
 		    var _ta = $(target)
-
 		    if( _ta.parent().attr('evt') ){
 		        _ta = $(_ta.parent()[0])
 		    }else if( _ta.parent().parent().attr('evt') ){
 		        _ta = $(_ta.parent().parent()[0])
 		    }
-
 		    var type = _ta.attr('evt')
-
-		    if( !type || _ta.hasClass('disabled') ) return 
-
+		    if( !type || _ta.hasClass('disabled') ) return
 		    switch( type ){
-		    	
 		    	case 'postnew.submit':
-
 		    		var form = _ta.parent().parent().parent()
 		            var inputs = form.serializeObject()
-
 		            if( !window.tinyMCE ){
 		            	tips('数据异常');  
 			            return
@@ -427,7 +433,6 @@ return {
 		            var title   =  $.trim(inputs.post_title)
 			        var url     =  $.trim(inputs.post_url)
 			        var content =  $.trim(inputs.post_content)
-
 
 		            if ( !title || title.length > 50 ) {
 			            tips('标题不能为空，且小于50个字符');  
@@ -450,81 +455,63 @@ return {
 		                data: inputs,  
 		                dataType: 'json',
 		                success: function(data){  
-
 		                	if( data.msg ){
 	                            tips(data.msg)
 	                        }
-
 		                    if( data.error ){
 		                        return
 		                    }
-
 		                    form.find('.form-control').val('')
-
+		                    tinymce.get('post_content').setContent('')
 		                    location.hash = 'posts/draft'
 		                }  
 		            });  
-
 		    		break;
-
 		        case 'password.submit':
 		        	var form = _ta.parent().parent().parent()
 		            var inputs = form.serializeObject()
-
 		            if( !inputs.action ){
 		                return
 		            }
-
 		        	if( !$.trim(inputs.passwordold) ){
 	                    tips('请输入原密码')
 	                    return
 	                }
-
-	                if( !inputs.password || inputs.password.length < 6 ){
-	                    tips('新密码不能为空且至少6位')
+	                if( !inputs.password || inputs.password.length < 8 ){
+	                    tips('新密码不能为空且至少8位')
 	                    return
 	                }
-
 	                if( inputs.password !== inputs.password2 ){
 	                    tips('两次密码输入不一致')
 	                    return
 	                }
-
 	                if( inputs.passwordold === inputs.password ){
 	                    tips('新密码和原密码不能相同')
 	                    return
 	                }
-
 		        	$.ajax({  
 		                type: 'POST',  
 		                url:  ajax_url,  
 		                data: inputs,  
 		                dataType: 'json',
 		                success: function(data){  
-
 		                    if( data.error ){
 		                        if( data.msg ){
 		                            tips(data.msg)
 		                        }
 		                        return
 		                    }
-
 		                    tips('修改成功！下次登录请使用新密码！')
-
 		                    $('input:password').val('')
 		                }  
 		            });  
-
 		            break;
-
 		        case 'info.submit':
 		            var form = _ta.parent().parent().parent()
 		            var inputs = form.serializeObject()
-
 		            if( !inputs.action ){
 		                return
 		            }
-
 	                if( !/.{2,20}$/.test(inputs.nickname) ){
 	                    tips('昵称限制在2-20字内')
 	                    return
@@ -538,25 +525,29 @@ return {
 	                if( !is_mail(inputs.email) ){
 	                    tips('邮箱格式错误')
 	                    return
-	                }
-*/
+	                }*/
+
 	                if( inputs.url && (!is_url(inputs.url) || inputs.url.length>100) ){
 	                    tips('网址格式错误')
+	                    $('.zurl').focus()
 	                    return
 	                }
 
 	                if( inputs.qq && !is_qq(inputs.qq) ){
 	                    tips('QQ格式错误')
+	                    $('.zqq').focus()
 	                    return
 	                }
 
 	                if( inputs.weixin && inputs.weixin.length>30 ){
 	                    tips('微信字数过长，限制在30字内')
+	                    $('.zwx').focus()
 	                    return
 	                }
 
 	                if( inputs.weibo && (!is_url(inputs.weibo) || inputs.weibo.length>100) ){
 	                    tips('微博格式错误')
+	                    $('.zwb').focus()
 	                    return
 	                }
 
@@ -566,26 +557,23 @@ return {
 		                data: inputs,  
 		                dataType: 'json',
 		                success: function(data){  
-
 		                    if( data.error ){
 		                        if( data.msg ){
 		                            tips(data.msg)
 		                        }
 		                        return
 		                    }
-
 		                    tips('修改成功！')
-
 		                    cache_userdata = null
 		                }  
 		            });  
-
 		            break;
-
-
+		        //other case
 		    }
 		})
-	}
-}
-
+		/**
+		 * 
+		 */
+	}//end init
+}// end return
 })

@@ -615,6 +615,29 @@ if(im('no_cat_in_url')&&!function_exists('no_category_base_refresh_rules')){
 	// 
 }
 #######################################################
+# User Center
+#######################################################
+function is_disable_username($name){
+	$disable_reg_keywords = im('user_nickname_out');
+    if( $disable_reg_keywords ){
+        $disable_reg_keywords = explode("\n", $disable_reg_keywords);
+    }
+	if( !$disable_reg_keywords || !$name ){
+		return false;
+	}
+	foreach ($disable_reg_keywords as $value) {
+        $value = trim($value);
+		if( !empty($value) && is_in_str(strtolower($name), strtolower($value)) ){
+			return true;
+		}
+	}
+	return false;
+}
+function is_in_str($haystack, $needle) { 
+    $haystack = '-_-!' . $haystack; 
+    return (bool)strpos($haystack, $needle); 
+}
+#######################################################
 # ADs
 #######################################################
 function _the_ads($name = '',$class = ''){

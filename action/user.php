@@ -37,14 +37,11 @@ $caches = array();
 // if( is_super_admin() ) $cuid = 14986;
 
 switch ($ui['action']) {
-
     case 'post.new':
-
-        if( !_hui('tougao_s') ){
+        if( !im('allow_user_post') ){
             print_r(json_encode(array('error'=>1, 'msg'=>'站点未允许用户发布文章')));  
             exit();
         }
-
         // last time
         $last_post = $wpdb->get_var("SELECT post_date FROM $wpdb->posts WHERE post_author='{$cuid}' AND post_type = 'post' ORDER BY post_date DESC LIMIT 1");
 
@@ -56,8 +53,6 @@ switch ($ui['action']) {
         $title   =  $ui['post_title'];
         $url     =  $ui['post_url'];
         $content =  $ui['post_content'];
-
-
         if ( empty($title) || mb_strlen($title) > 50 ) {
             print_r(json_encode(array('error'=>1, 'msg'=>'标题不能为空，且小于50个字符')));  
             exit();
@@ -74,9 +69,9 @@ switch ($ui['action']) {
         }
 
         if( !empty($url) ){
+            $url = wp_strip_all_tags($url);
             $content .= '<p>来源：<a href="'.$url.'" target="_blank">'.$url.'</a></p>';
         }
-
 
         // has post title
         $posttitle = $wpdb->get_var("SELECT post_title FROM $wpdb->posts WHERE post_author='{$cuid}' AND post_title = '{$title}' LIMIT 1");
@@ -85,39 +80,33 @@ switch ($ui['action']) {
             exit();
         }
 
-
         // insert post data
         $in_data = array(
-            'post_title'   => $title,
+            'post_title'   => wp_strip_all_tags($title),
             'post_author'  => $cuid,
-            'post_content' => $content
+            'post_content' => $content,
+            'meta_input'   => array(
+                'source_link' => $url
+            )
         );
 
         $in_id = wp_insert_post( $in_data );
 
-
         // fail
-        if (!$in_id) { 
-            print_r(json_encode(array('error'=>1, 'msg'=>'投稿失败，请稍后再试')));  
+        if (is_wp_error($in_id)) { 
+            $emsg = $in_id->get_error_message();
+            print_r(json_encode(array('error'=>1, 'msg'=>'投稿失败，请稍后再试','emsg'=>$emsg))); 
             exit();
         }
 
-
-        // insert post meta 
-        if( !empty($url) ){
-           add_post_meta($in_id, 'fromurl_value', $url, true);
-        }
-
-
         // mail message
-        if( _hui('tougao_mail_send') ){
-            wp_mail(_hui('tougao_mail_to'), '站长，有新投稿：'.$title, $content);
+        if( im('notification_of_user_post') ){
+            wp_mail(im('notification_by_email'), '站长，有新投稿：'.$title, $content);
         }
 
         print_r(json_encode(array('error'=>0, 'msg'=>'投稿成功，站长审核中...')));  
         exit();
    
-
         break;
     case 'posts':
         $status_all = array('publish', 'draft', 'pending', 'trash', 'future');
@@ -170,8 +159,8 @@ switch ($ui['action']) {
             exit();
         }
 
-        if( strlen($ui['password'])<6 ) {  
-            print_r(json_encode(array('error'=>1, 'msg'=>'密码至少6位')));  
+        if( strlen($ui['password'])<8 ) {  
+            print_r(json_encode(array('error'=>1, 'msg'=>'密码至少8位')));  
             exit();
         }
 
@@ -188,12 +177,10 @@ switch ($ui['action']) {
         global $wp_hasher;
         require_once( ABSPATH.WPINC.'/class-phpass.php' );
         $wp_hasher = new PasswordHash(8, TRUE);
-
         if(!$wp_hasher->CheckPassword($ui['passwordold'], $current_user->user_pass)) {
             print_r(json_encode(array('error'=>1, 'msg'=>'原密码错误')));  
             exit(); 
         }
-
         // require_once( ABSPATH.WPINC.'/registration.php' );
         $status = wp_update_user( 
             array (
@@ -201,20 +188,15 @@ switch ($ui['action']) {
                 'user_pass' => $ui['password']
             ) 
         );
-
         if( is_wp_error($status) ){
             print_r(json_encode(array('error'=>1, 'msg'=>'修改失败，请稍后再试')));  
             exit(); 
         }
-        
         print_r(json_encode(array('error'=>0)));  
         exit(); 
-        
-
         break;
 	case 'info.edit':
-
-        if( !$ui['nickname'] || ($ui['nickname'] && sstrlen($ui['nickname'])>12) || ($ui['nickname'] && sstrlen($ui['nickname'])<2) ) {  
+        if( !$ui['nickname'] || ($ui['nickname'] && _new_strlen($ui['nickname'])>12) || ($ui['nickname'] && _new_strlen($ui['nickname'])<2) ) {  
             print_r(json_encode(array('error'=>1, 'msg'=>'昵称不能为空且限制在2-12字内')));  
             exit();  
         }
@@ -229,13 +211,13 @@ switch ($ui['action']) {
             exit();  
         }*/
 
-        if( $ui['url'] && (!preg_match("/^((http|https)\:\/\/)([a-z0-9-]{1,}.)?[a-z0-9-]{2,}.([a-z0-9-]{1,}.)?[a-z0-9]{2,}$/", $ui['url']) || sstrlen($ui['url'])>100) ){
-            print_r(json_encode(array('error'=>1, 'msg'=>'网址格式错误')));  
+        if( $ui['url'] && (!preg_match("/^((http|https)\:\/\/)([a-z0-9-]{1,}.)?[a-z0-9-]{2,}.([a-z0-9-]{1,}.)?[a-z0-9]{2,}$/", $ui['url']) || _new_strlen($ui['url'])>100) ){
+            print_r(json_encode(array('error'=>1, 'msg'=>'网址格式错误'))); 
             exit(); 
         }
 
-        if( $ui['weibo'] && (!preg_match("/^((http|https)\:\/\/)([a-z0-9-]{1,}.)?[a-z0-9-]{2,}.([a-z0-9-]{1,}.)?[a-z0-9]{2,}$/", $ui['weibo']) || sstrlen($ui['weibo'])>100) ){
-            print_r(json_encode(array('error'=>1, 'msg'=>'微博格式错误')));  
+        if( $ui['weibo'] && (!preg_match("/^((http|https)\:\/\/)([a-z0-9-]{1,}.)?[a-z0-9-]{2,}.([a-z0-9-]{1,}.)?[a-z0-9]{2,}$/", $ui['weibo']) || _new_strlen($ui['weibo'])>100) ){
+            print_r(json_encode(array('error'=>1, 'msg'=>'微博格式错误')));
             exit(); 
         }
 
@@ -244,16 +226,16 @@ switch ($ui['action']) {
             exit(); 
         }
 
-        if( $ui['weixin'] && sstrlen($ui['weixin'])>30 ) {  
+        if( $ui['weixin'] && _new_strlen($ui['weixin'])>30 ) {  
             print_r(json_encode(array('error'=>1, 'msg'=>'微信字数过长，限制在30字内')));  
             exit();  
         }
 
-        /*if( is_disable_username($ui['nickname']) ){
+        if( is_disable_username($ui['nickname']) ){
         // if( !current_user_can('edit_posts') && is_disable_username($ui['nickname']) ){
         	print_r(json_encode(array('error'=>1, 'msg'=>'昵称含保留或非法字符，换一个再试')));  
             exit();
-        }*/
+        }
 
         /*$hasmail = $wpdb->get_var( "SELECT ID FROM wp_users WHERE user_email='{$ui["email"]}'" );
         if( $hasmail && (int)$hasmail !== $cuid ){
@@ -261,7 +243,6 @@ switch ($ui['action']) {
             exit();  
         }*/
 
-        // if( $ui['nickname'] ) update_user_meta($cuid, 'nickname', $ui['nickname']);
         if( $ui['weibo'] ) update_user_meta($cuid, 'weibo', $ui['weibo']);
         if( $ui['weixin'] ) update_user_meta($cuid, 'weixin', $ui['weixin']);
         if( $ui['qq'] ) update_user_meta($cuid, 'qq', $ui['qq']);
@@ -272,8 +253,6 @@ switch ($ui['action']) {
         // if( $ui['email'] ) $datas['user_email'] = $ui['email'];
         if( $ui['url'] ) $datas['user_url'] = $ui['url'];
         if( $ui['nickname'] ) $datas['display_name'] = $ui['nickname'];
-        // if( $ui['nickname'] ) $datas['user_login'] = $ui['nickname'];
-
 
         $status = wp_update_user( $datas ); 
 
@@ -281,7 +260,6 @@ switch ($ui['action']) {
             print_r(json_encode(array('error'=>1, 'msg'=>'修改失败，请稍后再试')));  
             exit(); 
         }
-
         print_r(json_encode(array('error'=>0)));  
         exit(); 
         break;

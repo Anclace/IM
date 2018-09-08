@@ -102,16 +102,16 @@ get_header();
 				<input type="input" class="form-control" name="nickname" value="{{>nickname}}">
 	  		</li>
 	  		<li><label>网址</label>
-				<input type="input" class="form-control" name="url" value="{{>url}}">
+				<input type="input" class="form-control zurl" name="url" value="{{>url}}">
 	  		</li>
 	  		<li><label>QQ</label>
-				<input type="input" class="form-control" name="qq" value="{{>qq}}">
+				<input type="input" class="form-control zqq" name="qq" value="{{>qq}}">
 	  		</li>
 	  		<li><label>微信号</label>
-				<input type="input" class="form-control" name="weixin" value="{{>weixin}}">
+				<input type="input" class="form-control zwx" name="weixin" value="{{>weixin}}">
 	  		</li>
 	  		<li><label>微博地址</label>
-				<input type="input" class="form-control" name="weibo" value="{{>weibo}}">
+				<input type="input" class="form-control zwb" name="weibo" value="{{>weibo}}">
 	  		</li>
 	  		<li>
 				<input type="button" evt="info.submit" class="btn btn-primary" name="submit" value="确认修改资料">

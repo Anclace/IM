@@ -3,7 +3,7 @@ if( !$_POST ){
     exit;
 }
 include 'load.php';
-//var_dump($_POST);
+
 if( !im('enable_user_center') ){
     exit;
 }

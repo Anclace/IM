@@ -170,3 +170,22 @@ function load_archive_list_js(){
 }
 add_action( 'wp_footer','load_archive_list_js' );
 #####################* *#####################
+function mail_smtp( $phpmailer ){
+$phpmailer->From = "1731938770@qq.com"; //发件人
+$phpmailer->FromName = "zgq"; //发件人昵称
+$phpmailer->Host = "smtp.qq.com"; //SMTP服务器地址
+$phpmailer->Port = 465; //SMTP端口，常用的有25、465、587，具体谷歌百度
+$phpmailer->SMTPSecure = "ssl"; //SMTP加密方式，常用的有SSL/TLS，具体谷歌百度
+$phpmailer->Username = "1731938770@qq.com"; //邮箱帐号
+$phpmailer->Password = 'koeqkumgeqsuhbdb'; //邮箱密码
+$phpmailer->IsSMTP(); //使用SMTP发送
+$phpmailer->SMTPAuth = true; //启用SMTPAuth服务
+}
+add_action('phpmailer_init','mail_smtp');
+
+//测试能否发送邮件
+// $title = 'title11';
+// $body  = 'http://www.baidu.com';
+// $mail  = '446346414@qq.com';
+// $ss = wp_mail($mail,$title,$body);
+// var_dump($ss);

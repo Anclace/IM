@@ -6,6 +6,7 @@
 _moloader('mo_get_user_rp', false);
 $http_post = ('POST' == $_SERVER['REQUEST_METHOD']);
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : 'lostpassword';
+$checkemail = isset($_REQUEST['checkemail']);
 if ( isset($_REQUEST['key']) )
 	$action = 'resetpass';
 if ( !in_array( $action, array( 'lostpassword', 'resetpass', 'success' ), true ) )
@@ -18,18 +19,22 @@ switch ($action) {
 		$errors = new WP_Error();
 		if ( $http_post ) {
 			$errors = retrieve_password();
+			if ( !is_wp_error($errors) ) {
+				$redirect_to = mo_get_user_rp().'?checkemail=confirm';
+				wp_safe_redirect( $redirect_to );
+				exit();
+			}
 		}
 		if ( isset( $_REQUEST['error'] ) ) {
 			if ( 'invalidkey' == $_REQUEST['error'] )
-				$errors->add( 'invalidkey', __( 'Sorry, that key does not appear to be valid.' ) );
+				$errors->add( 'invalidkey', __( 'Your password reset link appears to be invalid. Please request a new link below.' ) );
 			elseif ( 'expiredkey' == $_REQUEST['error'] )
-				$errors->add( 'expiredkey', __( 'Sorry, that key has expired. Please try again.' ) );
+				$errors->add( 'expiredkey', __( 'Your password reset link has expired. Please request a new link below.' ) );
 		}
 		$classactive1 = ' class="active"';
 		break;
 	case 'resetpass' :
 		$user = check_password_reset_key($_REQUEST['key'], $_REQUEST['login']);
-
 		if ( is_wp_error($user) ) {
 			if ( $user->get_error_code() === 'expired_key' ){
 				wp_redirect( mo_get_user_rp() . '?action=lostpassword&error=expiredkey' );
@@ -39,47 +44,25 @@ switch ($action) {
 			}
 			exit;
 		}
-
 		$errors = new WP_Error();
-
 		if ( isset($_POST['pass1']) && $_POST['pass1'] != $_POST['pass2'] )
 			$errors->add( 'password_reset_mismatch', __( 'The passwords do not match.' ) );
-
-		if( strlen($_POST['pass1'])<6 ) {  
-			$errors->add( 'password_reset_mismatch2', '密码至少6位。' );
+		if( isset($_POST['pass1']) && strlen($_POST['pass1']) < 8 ) {  
+			$errors->add( 'password_reset_mismatch2', '密码至少8位。' );
 	    }
-
-		/**
-		 * Fires before the password reset procedure is validated.
-		 *
-		 * @since 3.5.0
-		 *
-		 * @param object           $errors WP Error object.
-		 * @param WP_User|WP_Error $user   WP_User object if the login and reset key match. WP_Error object otherwise.
-		 */
 		do_action( 'validate_password_reset', $errors, $user );
-
 		if ( ( ! $errors->get_error_code() ) && isset( $_POST['pass1'] ) && !empty( $_POST['pass1'] ) ) {
 			reset_password($user, $_POST['pass1']);
 			wp_redirect( mo_get_user_rp() . '?action=success' );
 			exit;
 		}
-
-		// wp_enqueue_script('utils');
-		// wp_enqueue_script('user-profile');
-
 		$classactive2 = ' class="active"';
-
 		break;
-
 	case 'success' :
 		$classactive3 = ' class="active"';
 		break;
 }
-
-
 get_header();
-
 ?>
 <section class="container">	
 <div class="content-wrap">
@@ -93,7 +76,10 @@ get_header();
 		
 		<?php 
 		if( $classactive1 ){ 
-			if( $errors !== true ){
+			if($checkemail){
+				echo '<h3><span class="text-success">已向注册邮箱发送邮件！</span></h3>';
+				echo '<p>去邮箱查收邮件并点击重置密码链接</p>';
+			}else if( $errors !== true ){
 		?>
 		<form action="<?php echo esc_url( mo_get_user_rp() . '?action=lostpassword' ); ?>" method="post">
 			<?php errormsg($errors); ?>
@@ -102,11 +88,8 @@ get_header();
 			<p><input type="submit" value="获取密码重置邮件" class="btn btn-block btn-primary btn-lg"></p>
 		</form>
 		<?php 
-			}else{ 
-				echo '<h3><span class="text-success">已向注册邮箱发送邮件！</span></h3>';
-				echo '<p>去邮箱查收邮件并点击重置密码链接</p>';
 			}
-		} ?>
+		}?>
 
 		<?php if( $classactive2 ){ ?>
 		<form action="" method="post">
@@ -131,13 +114,9 @@ get_header();
 </div>
 </section>
 <?php
-
-
-
 function errormsg($wp_error='') {
 	if ( empty($wp_error) )
 		$wp_error = new WP_Error();
-
 	if ( $wp_error->get_error_code() ) {
 		$errors = '';
 		$messages = '';
@@ -151,23 +130,9 @@ function errormsg($wp_error='') {
 			}
 		}
 		if ( ! empty( $errors ) ) {
-			/**
-			 * Filter the error messages displayed above the login form.
-			 *
-			 * @since 2.1.0
-			 *
-			 * @param string $errors Login error message.
-			 */
 			echo '<p class="errtip">' . apply_filters( 'login_errors', $errors ) . "</p>\n";
 		}
 		if ( ! empty( $messages ) ) {
-			/**
-			 * Filter instructional messages displayed above the login form.
-			 *
-			 * @since 2.5.0
-			 *
-			 * @param string $messages Login messages.
-			 */
 			echo '<p class="errtip">' . apply_filters( 'login_messages', $messages ) . "</p>\n";
 		}
 	}
@@ -176,7 +141,7 @@ function retrieve_password() {
 	$errors = new WP_Error();
 
 	if ( empty( $_POST['user_login'] ) || ! is_string( $_POST['user_login'] ) ) {
-		$errors->add('empty_username', __('<strong>ERROR</strong>: Enter a username or e-mail address.'));
+		$errors->add('empty_username', __('<strong>ERROR</strong>: Enter a username or email address.'));
 	} else if ( strpos( $_POST['user_login'], '@' ) ) {
 		$user_data = get_user_by( 'email', trim( $_POST['user_login'] ) );
 		if ( empty( $user_data ) )
@@ -192,7 +157,7 @@ function retrieve_password() {
 		return $errors;
 
 	if ( !$user_data ) {
-		$errors->add('invalidcombo', __('<strong>ERROR</strong>: Invalid username or e-mail.'));
+		$errors->add('invalidcombo', __('<strong>ERROR</strong>: Invalid username or email.'));
 		return $errors;
 	}
 

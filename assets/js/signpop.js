@@ -31,8 +31,8 @@ return {
 			                <input type="text" name="name" class="form-control" id="inputName" placeholder="设置昵称">\
 			            </h6>\
 			            <h6>\
-			                <label for="inputEmail">邮箱</label>\
-			                <input type="email" name="email" class="form-control" id="inputEmail" placeholder="邮箱">\
+			                <label for="inputEmail2">邮箱</label>\
+			                <input type="email" name="email" class="form-control" id="inputEmail2" placeholder="邮箱">\
 			            </h6>\
 			            <div class="sign-submit">\
 			                <input type="button" class="btn btn-primary btn-block signsubmit-loader" name="submit" value="快速注册">  \
@@ -109,15 +109,15 @@ return {
                     return
                 }
             }else{
-            	if( inputs.password.length < 6 ){
-	                logtips('密码太短，至少6位')
+            	if( inputs.password.length < 8 ){
+	                logtips('密码太短，至少8位')
 	                return
 	            }
             }
 
             $.ajax({  
                 type: "POST",  
-                url:  jsui.uri+'/action/log.php',  
+                url:  jsui.uri.replace('/assets','')+'/action/log.php',  
                 data: inputs,  
                 dataType: 'json',
                 success: function(data){  

@@ -154,6 +154,11 @@ switch ($ui['action']) {
 		);
 		break;
 	case 'password.edit':
+        /*if( !is_user_logged_in() ) {
+            print_r(json_encode(array('error'=>1, 'msg'=>'必须登录才能操作')));
+            exit;
+        }*/
+
         if( !$ui['passwordold'] && !$ui['password'] && !$ui['password2'] ){
             print_r(json_encode(array('error'=>1, 'msg'=>'密码不能为空'))); 
             exit();
@@ -170,7 +175,7 @@ switch ($ui['action']) {
         }
 
         if( $ui['passwordold'] == $ui['password'] ) {  
-            print_r(json_encode(array('error'=>1, 'msg'=>'新密码和原密码不能相同')));  
+            print_r(json_encode(array('error'=>1, 'msg'=>'新密码和原密码不能相同')));
             exit();
         }
 

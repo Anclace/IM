@@ -5,8 +5,8 @@ if( !$_POST && !$_POST['action'] ){
 
 include 'load.php';
 
-if( !_hui('user_page_s') ){
-    print_r(json_encode(array('error'=>1, 'msg'=>'该站点未开启会员中心功能')));
+if( !im('enable_user_center') ){
+    print_r(json_encode(array('error'=>1, 'msg'=>'该站点暂未开启会员功能')));
     exit;
 }
 
@@ -63,9 +63,7 @@ switch ($ui['action']) {
         print_r(json_encode(array('error'=>0, 'msg'=>'成功登录，页面跳转中')));
         exit();  
         
-
         break;
-
     case 'signup':
         if( is_user_logged_in() ) {
             print_r(json_encode(array('error'=>1, 'msg'=>'你已经登录')));
@@ -82,15 +80,15 @@ switch ($ui['action']) {
             exit();  
         }
 
-        /*if( sstrlen($ui['password'])<6 ) {  
+        /*if( _new_strlen($ui['password'])<8 ) {  
             print_r(json_encode(array('error'=>1, 'msg'=>'密码太短')));  
             exit();
         }*/
 
-        /*if( is_disable_username($ui['name']) ){
+        if( is_disable_username($ui['name']) ){
             print_r(json_encode(array('error'=>1, 'msg'=>'昵称含保留或非法字符，换一个再试')));  
             exit();
-        }*/
+        }
 
         /*if( $ui['password'] !== $ui['password2'] ) {  
             print_r(json_encode(array('error'=>1, 'msg'=>'两次密码输入不一致')));  
@@ -98,7 +96,7 @@ switch ($ui['action']) {
         }*/
   
         $random_password = wp_generate_password( 12, false );  
-        // $uname = 'u'.get_millisecond().rand(1000,9999);
+        // $uname = 'u'.get_millisecond().rand(1000,9999);//生成用户名
         $status = wp_create_user( $ui['name'], $random_password , $ui['email'] );  
 
         if ( is_wp_error($status) ){
@@ -116,7 +114,6 @@ switch ($ui['action']) {
         }
 
         /*if( $status ){
-            // update_user_meta($status, 'nickname', $ui['name']);
             wp_update_user(array(
                 'ID' => $status,
                 'display_name' => $ui['name']
@@ -136,13 +133,12 @@ switch ($ui['action']) {
         }
         exit();*/
 
-        $from = get_option('admin_email');  
+        $from = get_option('admin_email');
         $headers = 'From: '.$from . "\r\n";  
         $subject = '您已成功注册成为'.get_bloginfo('name').'用户';  
         $msg = '用户名：'.$ui['name']."\r\n".'密码：'.$random_password."\r\n".'网址：'.get_bloginfo('url');
 
-        /*print_r($subject);
-        print_r($msg);
+        /*print_r(json_encode(array('from'=>$from,'subject'=>$subject,'msg'=>$msg)));
         die;*/
         if( wp_mail( $ui['email'], $subject, $msg, $headers ) ){
             print_r(json_encode(array('error'=>0, 'msg'=>'密码已发送到您的邮箱，请前去查收')));  
@@ -153,7 +149,6 @@ switch ($ui['action']) {
         exit();
         
         break;
-
     case 'password':
         if( !is_user_logged_in() ) {
             print_r(json_encode(array('error'=>1, 'msg'=>'必须登录才能操作')));
@@ -165,8 +160,8 @@ switch ($ui['action']) {
             exit();
         }
 
-        if( strlen($ui['password'])<6 ) {  
-            print_r(json_encode(array('error'=>1, 'msg'=>'密码至少6位')));  
+        if( strlen($ui['password'])<8 ) {  
+            print_r(json_encode(array('error'=>1, 'msg'=>'密码至少8位')));  
             exit();
         }
 
@@ -176,7 +171,7 @@ switch ($ui['action']) {
         }
 
         if( $ui['passwordold'] == $ui['password'] ) {  
-            print_r(json_encode(array('error'=>1, 'msg'=>'新密码和原密码不能相同')));  
+            print_r(json_encode(array('error'=>1, 'msg'=>'新密码和原密码不能相同')));
             exit();
         }
 
@@ -207,12 +202,9 @@ switch ($ui['action']) {
         print_r(json_encode(array('error'=>0)));  
         exit(); 
         
-
         break;
-
     default:
         # code...
         break;
 }
-
 exit();

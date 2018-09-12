@@ -98,13 +98,13 @@ if( Number(jsui.ajaxpager) > 0 && ($('.excerpt').length || $('.excerpt-minic').l
                 item: '.excerpt',
                 pagination: '.pagination',
                 next: '.next-page a',
-                loader: '<div class="pagination-loading"><img src="'+jsui.uri+'/img/loading.gif"></div>',
+                loader: '<div class="pagination-loading"><img src="'+jsui.uri+'/images/loading.gif"></div>',
                 trigger: 'More',
                 onRenderComplete: function() {
                     tbquire(['lazyload'], function() {
                         $('.excerpt .thumb').lazyload({
                             data_attribute: 'src',
-                            placeholder: jsui.uri + '/img/thumbnail.png',
+                            placeholder: jsui.uri + '/images/thumbnail.png',
                             threshold: 400
                         });
                     });
@@ -120,13 +120,13 @@ if( Number(jsui.ajaxpager) > 0 && ($('.excerpt').length || $('.excerpt-minic').l
                 item: '.excerpt-minic',
                 pagination: '.pagination',
                 next: '.next-page a',
-                loader: '<div class="pagination-loading"><img src="'+jsui.uri+'/img/loading.gif"></div>',
+                loader: '<div class="pagination-loading"><img src="'+jsui.uri+'/images/loading.gif"></div>',
                 trigger: 'More',
                 onRenderComplete: function() {
                     tbquire(['lazyload'], function() {
                         $('.excerpt .thumb').lazyload({
                             data_attribute: 'src',
-                            placeholder: jsui.uri + '/img/thumbnail.png',
+                            placeholder: jsui.uri + '/images/thumbnail.png',
                             threshold: 400
                         });
                     });
@@ -144,31 +144,31 @@ if( Number(jsui.ajaxpager) > 0 && ($('.excerpt').length || $('.excerpt-minic').l
 tbquire(['lazyload'], function() {
     $('.avatar').lazyload({
         data_attribute: 'src',
-        placeholder: jsui.uri + '/img/avatar-default.png',
+        placeholder: jsui.uri + '/images/avatar-default.png',
         threshold: 400
     })
 
     $('.widget .avatar').lazyload({
         data_attribute: 'src',
-        placeholder: jsui.uri + '/img/avatar-default.png',
+        placeholder: jsui.uri + '/images/avatar-default.png',
         threshold: 400
     })
 
     $('.thumb').lazyload({
         data_attribute: 'src',
-        placeholder: jsui.uri + '/img/thumbnail.png',
+        placeholder: jsui.uri + '/images/thumbnail.png',
         threshold: 400
     })
 
     $('.widget_ui_posts .thumb').lazyload({
         data_attribute: 'src',
-        placeholder: jsui.uri + '/img/thumbnail.png',
+        placeholder: jsui.uri + '/images/thumbnail.png',
         threshold: 400
     })
 
     $('.wp-smiley').lazyload({
         data_attribute: 'src',
-        // placeholder: jsui.uri + '/img/thumbnail.png',
+        // placeholder: jsui.uri + '/images/thumbnail.png',
         threshold: 400
     })
 })

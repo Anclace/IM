@@ -240,6 +240,7 @@ return {
 				}
 			},
 			before: function(){
+				checklogout()
 				$('.user-main').show()
 				$('.user-main-postnew').hide()
 			},
@@ -405,6 +406,18 @@ return {
 		    }, 5000)
 		}
 
+		function checklogout(){
+			cookies = document.cookie.split(';')
+			for(var i=0;i<cookies.length;i++){
+				if('im_out=im_check'===(cookies[i].trim())){
+					if(jsui.is_signin){
+						location.reload()
+						document.cookie = "im_out=;expires=Thu, 01 Jan 1970 00:00:00 GMT"
+					}
+					break
+				}
+			}
+		}
 		/* click event
 		 * ====================================================
 		*/
@@ -568,6 +581,9 @@ return {
 		                }  
 		            });  
 		            break;
+		        case 'logout.submit':
+					document.cookie='im_out=im_check'
+					break;
 		        //other case
 		    }
 		})

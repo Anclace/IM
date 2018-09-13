@@ -21,7 +21,7 @@ get_header();
 					<li class="usermenu-comments"><a href="#comments/all">我的评论</a></li>
 					<li class="usermenu-info"><a href="#info">修改资料</a></li>
 					<li class="usermenu-password"><a href="#password">修改密码</a></li>
-					<li class="usermenu-signout"><a href="<?php echo wp_logout_url(home_url()) ?>">退出</a></li>
+					<li class="usermenu-signout" evt="logout.submit"><a href="<?php echo wp_logout_url(home_url()) ?>">退出</a></li>
 				</ul>
 			</div>
 		</div>

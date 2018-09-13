@@ -25,8 +25,7 @@ function mo_comments_list($comment, $args, $depth) {
             if( !$pcs ){
                 $commentcount = 0;
             }else{
-                $page = $page-1;
-                $commentcount = $cpp * $page;
+                $commentcount = $cpp * ($page-1);
             }
         }
     }
@@ -43,7 +42,7 @@ function mo_comments_list($comment, $args, $depth) {
             echo '<span class="comt-approved">待审核</span>';
         }
         echo '<div class="comt-meta"><span class="comt-author">'.get_comment_author_link().'</span>';
-            echo _get_time_ago($comment->comment_date); 
+            echo _get_time_ago($comment->comment_date_gmt); 
             if ($comment->comment_approved !== '0'){
                 $replyText = get_comment_reply_link( array_merge( $args, array('add_below' => 'div-comment', 'depth' => $depth, 'max_depth' => $args['max_depth'] ) ) );
                 // echo str_replace(' href', ' href="javascript:;" data-href', $replyText ); 

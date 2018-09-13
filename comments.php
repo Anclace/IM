@@ -1,6 +1,9 @@
 <?php
 defined('ABSPATH') or die('This file can not be loaded directly.');
-if ( !comments_open() ) return;
+if ( post_password_required() ){
+	echo '<p>此篇文章受密码保护，输入密码查看评论</p>';
+	return;
+}
 /*global $comment_ids; $comment_ids = array();
 foreach ( $comments as $comment ) {
 	if (get_comment_type() == "comment") {
@@ -10,14 +13,17 @@ foreach ( $comments as $comment ) {
 $my_email = get_bloginfo ( 'admin_email' );
 $str = "SELECT COUNT(*) FROM $wpdb->comments WHERE comment_post_ID = $post->ID AND comment_approved = '1' AND comment_type = '' AND comment_author_email";
 $count_t = $post->comment_count;
-date_default_timezone_set('PRC');
-$closeTimer = (strtotime(date('Y-m-d G:i:s'))-strtotime(get_the_time('Y-m-d G:i:s')))/86400;
+//date_default_timezone_set('PRC');
 ?>
 <div class="title" id="comments">
 	<h3><?php echo im('comment_title') ?> <?php echo $count_t ? '<b>'.$count_t.'</b>':'<small>抢沙发</small>'; ?></h3>
 </div>
 <div id="respond" class="no_webshot">
-	<?php if ( get_option('comment_registration') && !is_user_logged_in() ) { ?>
+	<?php if( !comments_open() ) { ?>
+	<h3 class="title">
+		<strong>文章评论已关闭！</strong>
+	</h3>
+	<?php }elseif(get_option('comment_registration') && !is_user_logged_in()){ ?>
 	<div class="comment-signarea">
 		<h3 class="text-muted">评论前必须登录！</h3>
 		<p>
@@ -25,10 +31,6 @@ $closeTimer = (strtotime(date('Y-m-d G:i:s'))-strtotime(get_the_time('Y-m-d G:i:
 			<a href="javascript:;" class="btn btn-default signup-loader">注册</a>
 		</p>
 	</div>
-	<?php }elseif( get_option('close_comments_for_old_posts') && $closeTimer > get_option('close_comments_days_old') ) { ?>
-	<h3 class="title">
-		<strong>文章评论已关闭！</strong>
-	</h3>
 	<?php }else{ ?>
 	<form action="<?php echo get_option('siteurl'); ?>/wp-comments-post.php" method="post" id="commentform">
 		<div class="comt">

@@ -75,7 +75,6 @@ function form_data_valid($field,$args){
 	if(strpos($args,',')){
 		$id = explode(',', $args);
 		foreach ($id as $key => $value) {
-			echo $value;
 			if(is_numeric($value)&&!strpos($value,'.')){
 				$valid_id[] = (int)$value;
 			}

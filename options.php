@@ -1084,6 +1084,14 @@ function optionsframework_options() {
 		'std'  => __('提交评论', 'im'),
 		'type' => 'text'
 	);
+	// comment editable after submition before page reload
+	$options[] = array(
+		'name' => __('评论提交后是否可再次编辑','im'),
+		'desc' => __('评论提交后可再次编辑(页面重载前)','im'),
+		'id'   => 'comment_editable_after_submit',
+		'std'  => '1',
+		'type' => 'checkbox'
+	);
 	// Comment reply notify mail with extra info
 	$options[] = array(
 		'name' => __('用户评论被回复时邮件内容附自定义信息（被回复都会邮件通知）','im'),

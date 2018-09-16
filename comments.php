@@ -1,17 +1,11 @@
 <?php
 defined('ABSPATH') or die('This file can not be loaded directly.');
+
 if ( post_password_required() ){
-	echo '<p>此篇文章受密码保护，输入密码查看评论</p>';
+	echo '<p>此篇文章受密码保护，输入密码评论或查看评论</p>';
 	return;
 }
-/*global $comment_ids; $comment_ids = array();
-foreach ( $comments as $comment ) {
-	if (get_comment_type() == "comment") {
-		$comment_ids[get_comment_id()] = ++$comment_i;
-	}
-} */
-$my_email = get_bloginfo ( 'admin_email' );
-$str = "SELECT COUNT(*) FROM $wpdb->comments WHERE comment_post_ID = $post->ID AND comment_approved = '1' AND comment_type = '' AND comment_author_email";
+
 $count_t = $post->comment_count;
 //date_default_timezone_set('PRC');
 ?>
@@ -38,20 +32,19 @@ $count_t = $post->comment_count;
 				<?php 
 					if ( is_user_logged_in() ) {
 						global $current_user;
-						// get_currentuserinfo();
+						//var_dump(get_currentuserinfo());
 						echo _get_the_avatar($user_id=get_current_user_id(), $user_email=$current_user->user_email);
-						echo '<p>'.$user_identity.'</p>';
+						echo '<cite>'.$user_identity.'</cite>';
 					}
 					else{
 						if( $comment_author_email!=='' ) {
 							echo _get_the_avatar($user_id='', $user_email=$comment->comment_author_email);
-						}
-						else{
+						}else{
 							echo _get_the_avatar($user_id='', $user_email='');
 						}
 						if ( !empty($comment_author) ){
-							echo '<p>'.$comment_author.'</p>';
-							echo '<p><a href="javascript:;" evt="comment-user-change">更换</a></p>';
+							echo '<cite>'.$comment_author.'</cite>';
+							echo '<p><a href="javascript:;" class="comment-user-change">更换</a></p>';
 						}
 					}
 				?>
@@ -71,8 +64,8 @@ $count_t = $post->comment_count;
 					<div class="comt-comterinfo" id="comment-author-info" <?php if ( !empty($comment_author) ) echo 'style="display:none"'; ?>>
 						<ul>
 							<li class="form-inline"><label class="hide" for="author">昵称</label><input class="ipt" type="text" name="author" id="author" value="<?php echo esc_attr($comment_author); ?>" tabindex="2" placeholder="昵称"><span class="text-muted">昵称 (必填)</span></li>
-							<li class="form-inline"><label class="hide" for="email">邮箱</label><input class="ipt" type="text" name="email" id="email" value="<?php echo esc_attr($comment_author_email); ?>" tabindex="3" placeholder="邮箱"><span class="text-muted">邮箱 (必填)</span></li>
-							<li class="form-inline"><label class="hide" for="url">网址</label><input class="ipt" type="text" name="url" id="url" value="<?php echo esc_attr($comment_author_url); ?>" tabindex="4" placeholder="网址"><span class="text-muted">网址</span></li>
+							<li class="form-inline"><label class="hide" for="email">邮箱</label><input class="ipt" type="email" name="email" id="email" value="<?php echo esc_attr($comment_author_email); ?>" tabindex="3" placeholder="邮箱"><span class="text-muted">邮箱 (必填)</span></li>
+							<li class="form-inline"><label class="hide" for="url">网址</label><input class="ipt" type="url" name="url" id="url" value="<?php echo esc_attr($comment_author_url); ?>" tabindex="4" placeholder="网址"><span class="text-muted">网址</span></li>
 						</ul>
 					</div>
 				<?php } ?>

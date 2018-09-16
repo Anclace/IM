@@ -1,33 +1,36 @@
 <?php
+// 有bug,停用
 if ( 'POST' != $_SERVER['REQUEST_METHOD'] ) {
+	$protocol = $_SERVER['SERVER_PROTOCOL'];
+	if ( ! in_array( $protocol, array( 'HTTP/1.1', 'HTTP/2', 'HTTP/2.0' ) ) ) {
+		$protocol = 'HTTP/1.0';
+	}
 	header('Allow: POST');
-	header('HTTP/1.1 405 Method Not Allowed');
+	header("$protocol 405 Method Not Allowed");
 	header('Content-Type: text/plain');
 	exit;
 }
-
 require( dirname(__FILE__).'/../../../../wp-load.php' );
+
 nocache_headers();
+
 $comment_post_ID = isset($_POST['comment_post_ID']) ? (int) $_POST['comment_post_ID'] : 0;
 $post = get_post($comment_post_ID);
+// 其实还应该处理其他错误！
 if ( empty($post->comment_status) ) {
 	do_action('comment_id_not_found', $comment_post_ID);
-	err(__('Invalid comment status.')); // 將 exit 改為錯誤提示
+	err(__('Invalid comment status.')); 
 }
-
 $status = get_post_status($post);
-$status_obj = get_post_status_object($status);
 
-	do_action('pre_comment_on_post', $comment_post_ID);
+do_action('pre_comment_on_post', $comment_post_ID);
 
 $comment_author       = ( isset($_POST['author']) )  ? trim(strip_tags($_POST['author'])) : null;
 $comment_author_email = ( isset($_POST['email']) )   ? trim($_POST['email']) : null;
 $comment_author_url   = ( isset($_POST['url']) )     ? trim($_POST['url']) : null;
 $comment_content      = ( isset($_POST['comment']) ) ? trim($_POST['comment']) : null;
-$edit_id              = ( isset($_POST['edit_id']) ) ? $_POST['edit_id'] : null; // 提取 edit_id
+$edit_id              = ( isset($_POST['edit_id']) ) ? $_POST['edit_id'] : null; 
 
-
-// If the user is logged in
 $user = wp_get_current_user();
 if ( $user->ID ) {
 	if ( empty( $user->display_name ) )
@@ -43,34 +46,37 @@ if ( $user->ID ) {
 	}
 } else {
 	if ( get_option('comment_registration') || 'private' == $status )
-		err('Hi，你必须登录才能发表评论！'); // 將 wp_die 改為錯誤提示
+		err('Hi，你必须登录才能发表评论！'); 
 }
-
 
 $comment_type = '';
 if ( get_option('require_name_email') && !$user->ID ) {
 	if ( 6 > strlen($comment_author_email) || '' == $comment_author )
-		err( '请填写昵称和邮箱！' ); // 將 wp_die 改為錯誤提示
+		err( '请填写昵称和邮箱！' );
 	elseif ( !is_email($comment_author_email))
-		err( '请填写有效的邮箱地址！' ); // 將 wp_die 改為錯誤提示
+		err( '请填写有效的邮箱地址！' ); 
 }
 if ( '' == $comment_content )
-	err( '请填写点评论！' ); // 將 wp_die 改為錯誤提示
-// 增加: 錯誤提示功能
+	err( '请填写点评论！' ); 
+
 function err($ErrMsg) {
-    header('HTTP/1.1 405 Method Not Allowed');
+	$protocol = $_SERVER['SERVER_PROTOCOL'];
+	if ( ! in_array( $protocol, array( 'HTTP/1.1', 'HTTP/2', 'HTTP/2.0' ) ) ) {
+		$protocol = 'HTTP/1.0';
+	}
+    header('$protocol 405 Method Not Allowed');
     echo $ErrMsg;
     exit;
 }
 
 $comment_parent = isset($_POST['comment_parent']) ? absint($_POST['comment_parent']) : 0;
 $commentdata = compact('comment_post_ID', 'comment_author', 'comment_author_email', 'comment_author_url', 'comment_content', 'comment_type', 'comment_parent', 'user_ID');
-// 增加: 檢查評論是否正被編輯, 更新或新建評論
+
 if ( $edit_id ){
-$comment_id = $commentdata['comment_ID'] = $edit_id;
-wp_update_comment( $commentdata );
+	$comment_id = $commentdata['comment_ID'] = $edit_id;
+	wp_update_comment( $commentdata );
 } else {
-$comment_id = wp_new_comment( $commentdata );
+	$comment_id = wp_new_comment( $commentdata );
 }
 $comment = get_comment($comment_id);
 if ( !$user->ID ) {
@@ -80,14 +86,13 @@ if ( !$user->ID ) {
 	setcookie('comment_author_url_' . COOKIEHASH, esc_url($comment->comment_author_url), time() + $comment_cookie_lifetime, COOKIEPATH, COOKIE_DOMAIN);
 }
 
-$comment_depth = 1;   //为评论的 class 属性准备的
+$comment_depth = 1;
 $tmp_c = $comment;
 while($tmp_c->comment_parent != 0){
-$comment_depth++;
-$tmp_c = get_comment($tmp_c->comment_parent);
+	$comment_depth++;
+	$tmp_c = get_comment($tmp_c->comment_parent);
 }
 //以下是評論式樣, 不含 "回覆". 要用你模板的式樣 copy 覆蓋.
-
 echo '<li '; comment_class(); echo ' id="comment-'.get_comment_ID().'">';
 echo '<span class="comt-f">#</span>';
 //头像

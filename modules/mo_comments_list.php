@@ -41,7 +41,7 @@ function mo_comments_list($comment, $args, $depth) {
         if ($comment->comment_approved == '0'){
             echo '<span class="comt-approved">待审核</span>';
         }
-        echo '<div class="comt-meta"><span class="comt-author">'.get_comment_author_link().'</span>';
+        echo '<div class="comt-meta"><cite class="comt-author">'.get_comment_author_link().'</cite>';
             echo _get_time_ago($comment->comment_date_gmt); 
             if ($comment->comment_approved !== '0'){
                 $replyText = get_comment_reply_link( array_merge( $args, array('add_below' => 'div-comment', 'depth' => $depth, 'max_depth' => $args['max_depth'] ) ) );

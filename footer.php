@@ -56,7 +56,8 @@ window.jsui={
     ver: '<?php echo THEME_VERSION ?>',
 	roll: <?php echo $roll ?>,
     ajaxpager: '<?php echo im("ajaxpager") ?>',
-    url_rp: '<?php echo mo_get_user_rp() ?>'
+    url_rp: '<?php echo mo_get_user_rp() ?>',
+    com_edit_mode: '<?php echo im("comment_editable_after_submit") ?>'
 };
 </script>
 <?php wp_footer(); ?>

@@ -5,9 +5,17 @@ tbfine(function (){
 return {
 	init: function (){
 		$('.commentlist .url').attr('target','_blank')
-		$('.comment-user-change').on('click', function(){
-			$('#comment-author-info').slideDown(300)
-        	$('#comment-author-info input:first').focus()
+		$switchuser = $('#comment-user-change');
+		$switchuser.on('click', function(){
+			$('#comment-author-info').slideToggle(300,function(){
+				if ( $('#comment-author-info').css('display') == 'none' ) {
+					$switchuser.html('更改')
+					$('#comment').focus()
+				} else {
+					$switchuser.html('隐藏')
+					$('#comment-author-info input:first').focus()
+				}
+			})
 		})
 		/* 
 	     * comment
@@ -33,7 +41,7 @@ return {
 	    $body = (window.opera) ? (document.compatMode == "CSS1Compat" ? $('html') : $('body')) : $('html,body');
 /** submit */
 	    $('#commentform').submit(function(event) {
-	    	// filterData
+/** filterDataBegin */
 	    	$submitval = $('textarea#comment').val();
 	    	$authorval = $('#comment-author-info #author');
 	    	$emailval  = $('#comment-author-info #email');
@@ -55,12 +63,11 @@ return {
 				$urlval.focus();
 				return false;
 	    	}
-	    	// 
+/** filterDataEnd */
 	        $('.comt-loading').slideDown(300);
 	        $submit.attr('disabled', true).fadeTo('slow', 0.5);
 	        if (edit) $('#comment').after('<input type="text" name="edit_id" id="edit_id" value="' + edit + '" style="display:none;" />');
-	        
-/** submit */
+/** Ajax */
 	        $.ajax({
 	            url: jsui.uri.replace('/assets','') + '/action/comment-ajax.php',
 	            data: $(this).serialize(),
@@ -91,12 +98,15 @@ return {
 					if ( edit_mode == '1' ) {
 						div_ = (document.body.innerHTML.indexOf('div-comment-') == -1) ? '' : ((document.body.innerHTML.indexOf('li-comment-') == -1) ? 'div-' : '');
 						ok_htm = ok_htm.concat(edt1, div_, 'comment-', parent, '", "', parent, '", "respond", "', post, '", ', num, edt2);
+					}else{
+						ok_htm = ok_htm.concat('</i>');
 					}
 	                ok_htm += '</span><span></span>\n';
 
 	                if (parent == '0') {
 	                    if ($('#postcomments .commentlist').length) {
-	                        $('#postcomments .commentlist').before(new_htm);
+							// 在第一个之前插入，不指定的话会有重复的ok_htm
+							$('#postcomments .commentlist').parent().prepend(new_htm);
 	                    } else {
 	                        $('#respond').after(new_htm);
 	                    }
@@ -104,7 +114,7 @@ return {
 	                    $('#respond').after(new_htm);
 	                }
 
-	                $('#comment-author-info').slideUp()
+	                $('#comment-author-info').slideUp('fast',function(){$switchuser.html('更改')})
 
 	                $('#new_comm_' + num).hide().append(data);
 	                $('#new_comm_' + num + ' li .comt-main').append(ok_htm);
@@ -113,7 +123,18 @@ return {
 	                        scrollTop: $('#new_comm_' + num).offset().top - 200
 	                    },
 	                    500);*/
-	                $('#new_comm_' + num).find('.comt-avatar .avatar').attr('src', $('.commentnew .avatar:last').attr('src'));
+	                //$('#new_comm_' + num).find('.comt-avatar .avatar').attr('src', $('.commentnew .avatar:last').attr('src'));
+
+	                if (temp && respond) {
+	                    temp.parentNode.insertBefore(respond, temp);
+	                    temp.parentNode.removeChild(temp)
+	                    if($switchuser.length) $switchuser.show();
+	                }
+					// 再次编辑成功后删除原有
+					if(edit_mode&&edit){
+						$('#new_comm_' + t.num).remove()
+					}
+
 	                countdown();
 	                num++;
 	                edit = '';
@@ -121,10 +142,7 @@ return {
 	                cancel.style.display = 'none';
 	                cancel.onclick = null;
 	                t.I('comment_parent').value = '0';
-	                if (temp && respond) {
-	                    temp.parentNode.insertBefore(respond, temp);
-	                    temp.parentNode.removeChild(temp)
-	                }
+
 	            }
 	        });
 	        return false
@@ -146,9 +164,13 @@ return {
 	            		$cancel.text(cancel_edit)
 	            ) : $cancel.text(cancel_text);
 
+	            if($switchuser.length) $switchuser.hide();
+
 	            t.respondId = respondId;
 	            postId = postId || false;
 
+	            t.num = num;
+				// console.log(t.I('wp-temp-form-div'));console.log($('.wp-temp-form-div'));输出结果不一样
 	            if (!t.I('wp-temp-form-div')) {
 	                div = document.createElement('div');
 	                div.id = 'wp-temp-form-div';
@@ -167,7 +189,7 @@ return {
 
 	            if (post && postId) post.value = postId;
 	            parent.value = parentId;
-	            cancel.style.display = '';
+	            cancel.style.display = 'block';
 
 	            cancel.onclick = function() {
 	                if (edit) exit_prev_edit();
@@ -179,6 +201,7 @@ return {
 	                if (temp && respond) {
 	                    temp.parentNode.insertBefore(respond, temp);
 	                    temp.parentNode.removeChild(temp)
+	                    if($switchuser.length) $switchuser.show();
 	                }
 	                this.style.display = 'none';
 	                this.onclick = null;

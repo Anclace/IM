@@ -25,6 +25,10 @@ require( dirname(__FILE__).'/../../../../wp-load.php' );
 
 nocache_headers();
 
+$edit_id = ( isset($_POST['edit_id']) ) ? $_POST['edit_id'] : null;
+if($edit_id&&!im('comment_editable_after_submit'))
+			err('管理员已禁止再次编辑评论');
+
 $comment = wp_handle_comment_submission( wp_unslash( $_POST ) );
 if ( is_wp_error( $comment ) ) {
 	$data = intval( $comment->get_error_data() );
@@ -43,7 +47,6 @@ if ( is_wp_error( $comment ) ) {
 		)
 	);
 // 前台可编辑评论功能【前面的代码用来验证提交数据的正确性以及过滤如邮箱等字段是否合法】，此处采用的是删除刚插入的评论而修改原有的，也可以直接保留刚插入的而删除原有的
-	$edit_id = ( isset($_POST['edit_id']) ) ? $_POST['edit_id'] : null; 
 	if( $edit_id ){
 		// 将上面插入的评论至回收站（也可直接删除，这里留着是可以查看具体信息）
 		wp_update_comment(
@@ -73,9 +76,12 @@ if ( is_wp_error( $comment ) ) {
 	echo '</div>';
 }
 
+// Save user name, email, and website in the browser for the next time user comment
 $user = wp_get_current_user();
+/*# Decide whether to cache based on user selection
 $cookies_consent = ( isset( $_POST['wp-comment-cookies-consent'] ) );
-do_action( 'set_comment_cookies', $comment, $user, $cookies_consent );
+do_action( 'set_comment_cookies', $comment, $user, $cookies_consent );*/
+do_action( 'set_comment_cookies', $comment, $user );
 
 // update comments
 function uptcoms($edit_id){

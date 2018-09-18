@@ -37,18 +37,19 @@ $count_t = $post->comment_count;
 						echo '<cite>'.$user_identity.'</cite>';
 					}
 					else{
+						// 通过读取cookie获取
 						if( $comment_author_email!=='' ) {
-							echo _get_the_avatar($user_id='', $user_email=$comment->comment_author_email);
+							echo _get_the_avatar($user_id='', $user_email=$comment_author_email);
 						}else{
 							echo _get_the_avatar($user_id='', $user_email='');
 						}
 						if ( !empty($comment_author) ){
 							echo '<cite>'.$comment_author.'</cite>';
-							echo '<p><a href="javascript:;" class="comment-user-change">更换</a></p>';
+							echo '<p id="comment-user-change">更换</p>';
 						}
 					}
 				?>
-				<p><a id="cancel-comment-reply-link" href="javascript:;">取消</a></p>
+				<p id="cancel-comment-reply-link">取消</p>
 			</div>
 			<div class="comt-box">
 				<textarea placeholder="<?php echo im('comment_placehoder') ?>" class="input-block-level comt-area" name="comment" id="comment" cols="100%" rows="3" tabindex="1" onkeydown="if(event.ctrlKey&amp;&amp;event.keyCode==13){document.getElementById('submit').click();return false};"></textarea>

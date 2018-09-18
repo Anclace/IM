@@ -755,7 +755,7 @@ function _comment_mail_notify($comment_id) {
 		//echo 'mail to '. $to. '<br/> ' . $subject. $message; // for testing
 	}
 }
-//默认都邮件通知
+//默认评论被回复时邮件通知被回复者
 add_action('comment_form', '_comment_add_checkbox');
 function _comment_add_checkbox() {
 	echo '<label for="comment_mail_notify" class="checkbox inline hide" style="padding-top:0"><input type="checkbox" name="comment_mail_notify" id="comment_mail_notify" value="comment_mail_notify" checked="checked"/>有人回复时邮件通知我</label>';

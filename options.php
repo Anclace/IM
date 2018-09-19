@@ -534,6 +534,13 @@ function optionsframework_options() {
 		'name' => __('独立页面','im'),
 		'type' => 'heading'
 	);
+	// Exclude these posts or pages on all-in-one archive page
+	$options[] = array(
+		'name' => __('总归档页不显示如下文章【如设置如下值无效是因提升打开速度所做的缓存，更新或发布一篇文章即可】','im'),
+		'desc' => __('填写文章对应ID值，用英文逗号隔开','im'),
+		'id'   => 'archive_exlude_posts',
+		'type' => 'text'
+	);
 	// Site URL Navgation Page
 	$options[] = array(
 		'name' => __('网址导航页','im'),
@@ -728,9 +735,10 @@ function optionsframework_options() {
 	);
 	// Notifications of publishing by E-mail
 	$options[] = array(
-		'name' => __('通知邮箱','im'),
-		'desc' => __('通知邮箱','im'),
+		'name' => __('投稿通知接收邮箱','im'),
+		'desc' => __('投稿通知接收邮箱（默认为您后台用邮箱）','im'),
 		'id'   => 'notification_by_email',
+		'std'  => get_bloginfo('admin_email'),
 		'type' => 'text',
 		'class'=> 'notification_of_user_post_hidden'
 	);
@@ -738,7 +746,7 @@ function optionsframework_options() {
 		'name' => __('昵称禁止关键字', 'im'),
 		'desc' => __('一行一个关键字，用户昵称将不能使用或包含这些关键字，对编辑以下职位有效', 'im'),
 		'id' => 'user_nickname_out',
-		'std' => "赌博\n博彩\n彩票\n性爱\n色情\n做爱\n爱爱\n淫秽\n傻b\n妈的\n妈b\nadmin\ntest",
+		'std' => "管理员\n站长\n赌博\n博彩\n彩票\n性爱\n色情\n做爱\n爱爱\n淫秽\n傻b\n妈的\n妈b\nadmin\ntest",
 		'type' => 'textarea'
 	);
 	/**
@@ -999,6 +1007,70 @@ function optionsframework_options() {
 		'name' => __('互动设置','im'),
 		'type' => 'heading'
 	);
+	// Use SMTP Sending Emails
+	$options[] = array(
+		'name' => __('使用SMTP方式发送邮件（以下默认的不要改动，以防出错）','im'),
+		'desc' => __('启用SMTP方式发送邮件','im'),
+		'id'   => 'smtp_type',
+		'std'  => '1',
+		'type' => 'checkbox'
+	);
+	$options[] = array(
+		'desc' => __('发件人邮箱','im'),
+		'id'   => 'email_from',
+		'class'=> 'smtp_type_hidden mini',
+		'std'  => '',
+		'type' => 'text'
+	);
+	$options[] = array(
+		'desc' => __('发件人昵称','im'),
+		'id'   => 'email_sender_name',
+		'class'=> 'smtp_type_hidden mini',
+		'std'  => get_bloginfo('name'),
+		'type' => 'text'
+	);
+	$options[] = array(
+		'desc' => __('SMTP服务器地址（默认使用QQ邮箱）','im'),
+		'id'   => 'smtp_server_addr',
+		'class'=> 'smtp_type_hidden mini',
+		'std'  => 'smtp.qq.com',
+		'type' => 'text'
+	);
+	$options[] = array(
+		'desc' => __('SMTP端口','im'),
+		'id'   => 'smtp_server_port',
+		'class'=> 'smtp_type_hidden mini',
+		'std'  => '465',
+		'type' => 'text'
+	);
+	$options[] = array(
+		'desc' => __('SMTP加密方式','im'),
+		'id'   => 'email_smtp_secure',
+		'class'=> 'smtp_type_hidden mini',
+		'std'  => 'ssl',
+		'type' => 'text'
+	);
+	$options[] = array(
+		'desc' => __('SMTP邮箱账号','im'),
+		'id'   => 'email_smtp_accout',
+		'class'=> 'smtp_type_hidden mini',
+		'std'  => '',
+		'type' => 'text'
+	);
+	$options[] = array(
+		'desc' => __('SMTP邮箱密码','im'),
+		'id'   => 'email_smtp_pwd',
+		'class'=> 'smtp_type_hidden mini',
+		'std'  => '',
+		'type' => 'password'
+	);
+	$options[] = array(
+		'desc' => __('启用SMTPAuth服务','im'),
+		'id'   => 'email_smtp_auth',
+		'class'=> 'smtp_type_hidden',
+		'std'  => '1',
+		'type' => 'checkbox'
+	);
 	// Gravatar Link
 	$options[] = array(
 		'name' => __('Gravatar头像获取','im'),
@@ -1084,6 +1156,22 @@ function optionsframework_options() {
 		'std'  => __('提交评论', 'im'),
 		'type' => 'text'
 	);
+	// Email notification when user comments are replied
+	$options[] = array(
+		'name' => __('用户评论被回复时邮件通知','im'),
+		'desc' => __('用户评论被回复时邮件通知（通知被回复者,启用后的评论有效）','im'),
+		'id'   => 'notify_the_owner_of_the_comment_being_replied',
+		'std'  => '1',
+		'type' => 'checkbox'
+	);
+	$options[] = array(
+		'desc' => __('管理员的评论被回复时也接收通知（启用后的评论有效）','im'),
+		'id'   => 'comment_of_admin_being_replied_rn',
+		'class'=> 'notify_the_owner_of_the_comment_being_replied_hidden',
+		'std'  => '1',
+		'type' => 'checkbox'
+	);
+
 	// comment editable after submition before page reload
 	$options[] = array(
 		'name' => __('评论提交后是否可再次编辑','im'),
@@ -1364,12 +1452,6 @@ with(document)0[(getElementsByTagName("head")[0]||body).appendChild(createElemen
 		'name' => __('其他','im'),
 		'type' => 'heading'
 	);
-	// Exclude these posts or pages on all-in-one archive page
-	$options[] = array(
-		'name' => __('总归档页不显示如下文章','im'),
-		'desc' => __('填写文章对应ID值，用英文逗号隔开','im'),
-		'id'   => 'archive_exlude_posts',
-		'type' => 'text'
-	);
+	
 	return $options;
 }

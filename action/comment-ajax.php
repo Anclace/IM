@@ -35,7 +35,8 @@ if ( is_wp_error( $comment ) ) {
 	if ( ! empty( $data ) ) {
 		err($comment->get_error_message());
 	} else {
-		exit;
+		err('文章状态已改变，提交失败');
+		// exit;
 	}
 }else{
 // 为了安全，在页面提交的所有评论都需要审核

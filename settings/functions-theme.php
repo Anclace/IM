@@ -651,6 +651,27 @@ function _the_ads($name = '',$class = ''){
 #######################################################
 # INTERACTION
 #######################################################
+// 使用SMTP方式发送邮件
+if(im('smtp_type')){
+    function mail_smtp( $phpmailer ){
+        $phpmailer->From = im('email_from'); //发件人邮箱
+        $phpmailer->FromName = im('email_sender_name'); //发件人昵称
+        $phpmailer->Host = im('smtp_server_addr'); //SMTP服务器地址
+        $phpmailer->Port = im('smtp_server_port'); //SMTP端口，常用的有25、465、587
+        $phpmailer->SMTPSecure = im('email_smtp_secure'); //SMTP加密方式，常用的有SSL/TLS
+        $phpmailer->Username = im('email_smtp_accout'); //邮箱帐号
+        $phpmailer->Password = im('email_smtp_pwd'); //邮箱密码
+        $phpmailer->IsSMTP(); //使用SMTP发送
+        $phpmailer->SMTPAuth = true; //启用SMTPAuth服务
+    }
+    add_action('phpmailer_init','mail_smtp');
+}
+//测试能否发送邮件
+// $title = 'title11';
+// $body  = 'http://www.baidu.com';
+// $mail  = '446346414@qq.com';// 不要和发件人邮箱相同
+// $ss = wp_mail($mail,$title,$body);
+// var_dump($ss);
 /**
  * get Gravatar avatar
  */
@@ -704,11 +725,13 @@ function get_duoshuo_avatar($avatar) {
 /**
  * COMMENTS
  */
-//用户评论被回复时邮件通知
-add_action('comment_post', '_comment_mail_notify');
-function _comment_mail_notify($comment_id) {
-	$admin_notify = '1';// admin 要不要收回复通知 ( '1'=要 ; '0'=不要 )
-	$admin_email = get_bloginfo('admin_email');// $admin_email 可改为你指定的 e-mail.
+// 用户评论被回复时接收邮件通知
+if(im('notify_the_owner_of_the_comment_being_replied')){
+	add_action('comment_post', '_comment_mail_notify');
+}
+function _comment_mail_notify($comment_id,$coabrrn = '') {
+	$coabrrn = im('comment_of_admin_being_replied_rn');// 管理员的评论被回复时是否也接收通知
+	$admin_email = get_bloginfo('admin_email'); // 管理员邮箱
 	$comment = get_comment($comment_id);
 	$comment_author_email = trim($comment->comment_author_email);
 	$parent_id = $comment->comment_parent ? $comment->comment_parent : '';
@@ -717,7 +740,7 @@ function _comment_mail_notify($comment_id) {
 		$wpdb->query("ALTER TABLE {$wpdb->comments} ADD COLUMN comment_mail_notify TINYINT NOT NULL DEFAULT 0;");
 	}
 
-	if (($comment_author_email != $admin_email && isset($_POST['comment_mail_notify'])) || ($comment_author_email == $admin_email && $admin_notify == '1')) {
+	if (($comment_author_email != $admin_email && isset($_POST['comment_mail_notify'])) || ($comment_author_email == $admin_email && $coabrrn)) {
 		$wpdb->query("UPDATE {$wpdb->comments} SET comment_mail_notify='1' WHERE comment_ID='$comment_id'");
 	}
 
@@ -747,7 +770,7 @@ function _comment_mail_notify($comment_id) {
 		}
 		
 		$message = '
-    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse"><tbody><tr><td><table width="600" cellpadding="0" cellspacing="0" border="0" align="center" style="border-collapse:collapse"><tbody><tr><td><table width="100%" cellpadding="0" cellspacing="0" border="0"><tbody><tr><td width="73" align="left" valign="top" style="border-top:1px solid #d9d9d9;border-left:1px solid #d9d9d9;border-radius:5px 0 0 0"></td><td valign="top" style="border-top:1px solid #d9d9d9"><div style="font-size:14px;line-height:10px"><br><br><br><br></div><div style="font-size:18px;line-height:18px;color:#444;font-family:Microsoft Yahei">Hi, ' . $letter->author . '<br><br><br></div><div style="font-size:14px;line-height:22px;color:#444;font-weight:bold;font-family:Microsoft Yahei">您在' . $letter->sitename . '《' . $letter->post . '》的评论：</div><div style="font-size:14px;line-height:10px"><br></div><div style="font-size:14px;line-height:22px;color:#666;font-family:Microsoft Yahei">&nbsp; &nbsp;&nbsp; &nbsp; ' . $letter->comment . '</div><div style="font-size:14px;line-height:10px"><br><br></div><div style="font-size:14px;line-height:22px;color:#5DB408;font-weight:bold;font-family:Microsoft Yahei">' . $letter->replyer . ' 回复您：</div><div style="font-size:14px;line-height:10px"><br></div><div style="font-size:14px;line-height:22px;color:#666;font-family:Microsoft Yahei">&nbsp; &nbsp;&nbsp; &nbsp; ' . $letter->reply . '</div><div style="font-size:14px;line-height:10px"><br><br><br><br></div><div style="text-align:center"><a href="' . $letter->link . '" target="_blank" style="text-decoration:none;color:#fff;display:inline-block;line-height:44px;font-size:18px;background-color:#61B3E6;border-radius:3px;font-family:Microsoft Yahei">&nbsp; &nbsp;&nbsp; &nbsp;点击查看回复&nbsp; &nbsp;&nbsp; &nbsp;</a><br><br></div></td><td width="65" align="left" valign="top" style="border-top:1px solid #d9d9d9;border-right:1px solid #d9d9d9;border-radius:0 5px 0 0"></td></tr><tr><td style="border-left:1px solid #d9d9d9">&nbsp;</td><td align="left" valign="top" style="color:#999"><div style="font-size:8px;line-height:14px"><br><br></div><div style="min-height:1px;font-size:1px;line-height:1px;background-color:#e0e0e0">&nbsp;</div><div style="font-size:12px;line-height:20px;width:425px;font-family:Microsoft Yahei"><br>'.$additional_info.'此邮件由' . $letter->sitename . '系统自动发出，请勿回复！</div></td><td style="border-right:1px solid #d9d9d9">&nbsp;</td></tr><tr><td colspan="3" style="border-bottom:1px solid #d9d9d9;border-right:1px solid #d9d9d9;border-left:1px solid #d9d9d9;border-radius:0 0 5px 5px"><div style="min-height:42px;font-size:42px;line-height:42px">&nbsp;</div></td></tr></tbody></table></td></tr><tr><td><div style="min-height:42px;font-size:42px;line-height:42px">&nbsp;</div></td></tr></tbody></table></td></tr></tbody></table>';
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse"><tbody><tr><td><table width="600" cellpadding="0" cellspacing="0" border="0" align="center" style="border-collapse:collapse"><tbody><tr><td><table width="100%" cellpadding="0" cellspacing="0" border="0"><tbody><tr><td width="73" align="left" valign="top" style="border-top:1px solid #d9d9d9;border-left:1px solid #d9d9d9;border-radius:5px 0 0 0"></td><td valign="top" style="border-top:1px solid #d9d9d9"><div style="font-size:14px;line-height:10px"><br><br><br><br></div><div style="font-size:18px;line-height:18px;color:#444;font-family:Microsoft Yahei">Hi, ' . $letter->author . '<br><br><br></div><div style="font-size:14px;line-height:22px;color:#444;font-weight:bold;font-family:Microsoft Yahei">您在' . $letter->sitename . '《' . $letter->post . '》的评论：</div><div style="font-size:14px;line-height:10px"><br></div><div style="font-size:14px;line-height:22px;color:#666;font-family:Microsoft Yahei">&nbsp; &nbsp;&nbsp; &nbsp; ' . $letter->comment . '</div><div style="font-size:14px;line-height:10px"><br><br></div><div style="font-size:14px;line-height:22px;color:#5DB408;font-weight:bold;font-family:Microsoft Yahei">' . $letter->replyer . ' 回复您：</div><div style="font-size:14px;line-height:10px"><br></div><div style="font-size:14px;line-height:22px;color:#666;font-family:Microsoft Yahei">&nbsp; &nbsp;&nbsp; &nbsp; ' . $letter->reply . '</div><div style="font-size:14px;line-height:10px"><br><br><br><br></div><div style="text-align:center"><a href="' . $letter->link . '" target="_blank" style="text-decoration:none;color:#fff;display:inline-block;line-height:44px;font-size:18px;background-color:#61B3E6;border-radius:3px;font-family:Microsoft Yahei">&nbsp; &nbsp;&nbsp; &nbsp;点击查看回复&nbsp; &nbsp;&nbsp; &nbsp;</a><br><p style="color:rgb(255, 94, 82);text-align:left;font-size:14px;"><b>注意：</b>如查看的时候回复评论未显示，表明该评论还在审核中或审核未通过！</p></div></td><td width="65" align="left" valign="top" style="border-top:1px solid #d9d9d9;border-right:1px solid #d9d9d9;border-radius:0 5px 0 0"></td></tr><tr><td style="border-left:1px solid #d9d9d9">&nbsp;</td><td align="left" valign="top" style="color:#999"><div style="font-size:8px;line-height:14px"></div><div style="min-height:1px;font-size:1px;line-height:1px;background-color:#e0e0e0">&nbsp;</div><div style="font-size:12px;line-height:20px;width:425px;font-family:Microsoft Yahei"><br>'.$additional_info.'此邮件由' . $letter->sitename . '系统自动发出，请勿回复！</div></td><td style="border-right:1px solid #d9d9d9">&nbsp;</td></tr><tr><td colspan="3" style="border-bottom:1px solid #d9d9d9;border-right:1px solid #d9d9d9;border-left:1px solid #d9d9d9;border-radius:0 0 5px 5px"><div style="min-height:42px;font-size:42px;line-height:42px">&nbsp;</div></td></tr></tbody></table></td></tr><tr><td><div style="min-height:42px;font-size:42px;line-height:42px">&nbsp;</div></td></tr></tbody></table></td></tr></tbody></table>';
 
 		$from = "From: \"" . get_option('blogname') . "\" <$wp_email>";
 		$headers = "$from\nContent-Type: text/html; charset=" . get_option('blog_charset') . "\n";
@@ -755,7 +778,7 @@ function _comment_mail_notify($comment_id) {
 		//echo 'mail to '. $to. '<br/> ' . $subject. $message; // for testing
 	}
 }
-//默认评论被回复时邮件通知被回复者
+// 用户评论被回复时接收邮件通知
 add_action('comment_form', '_comment_add_checkbox');
 function _comment_add_checkbox() {
 	echo '<label for="comment_mail_notify" class="checkbox inline hide" style="padding-top:0"><input type="checkbox" name="comment_mail_notify" id="comment_mail_notify" value="comment_mail_notify" checked="checked"/>有人回复时邮件通知我</label>';

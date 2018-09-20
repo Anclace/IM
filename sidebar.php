@@ -1,4 +1,4 @@
-<?php if( !im('show_sidebar') ) return; ?>
+<?php if( im('sidebar_type') == 'site-layout-1' ) return; ?>
 <aside class="sidebar">
 <?php 
 	_moloader('mo_notice', false);

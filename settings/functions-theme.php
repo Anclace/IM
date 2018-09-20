@@ -238,7 +238,7 @@ function _bodyclass(){
 			$class .= ' site-minicat';
 		}
 	}
-	$class .= ' site-layout-'.(im('show_sidebar')?'2':'1');
+	$class .= ' m-excerpt-cat '.im('sidebar_type').' text-justify-on';
 	return trim($class);
 }
 // nav-menu
@@ -274,12 +274,34 @@ function _get_post_views($before = '阅读(',$after = ')'){
 function _get_post_comments($before = '评论(',$after = ')'){
 	return $before.get_comments_number_text('0','1','%').$after;
 }
-// 赞
-function _get_post_like_number($before = '赞(',$after = ')'){
+// 点赞功能
+function _get_post_like_number($before = '赞(<span>',$after = '</span>)'){
     global $post;
     $post_ID = $post->ID;
-    $likes = (int)get_post_meta( $post_ID, 'like', true );
+    $likes = (int)get_post_meta( $post_ID, 'ulike', true );
     return $before.$likes.$after;
+}
+
+add_action('wp_ajax_nopriv_im_like', 'im_like');
+add_action('wp_ajax_im_like', 'im_like');
+function im_like(){
+	global $wpdb,$post;
+	$id = isset($_POST["p_id"])?$_POST["p_id"]:'';
+	if(!$id || !is_numeric($id)) die('文章ID错误');
+	$action = $_POST["p_action"];
+	if ( $action == 'like'){
+		$im_raters = get_post_meta($id,'ulike',true);
+		$expire = time() + 99999999;
+		$domain = ($_SERVER['HTTP_HOST'] != 'localhost') ? $_SERVER['HTTP_HOST'] : false;
+		setcookie('ulike_'.$id,$id,$expire,'/',$domain,false);
+		if (!$im_raters || !is_numeric($im_raters)) {
+			update_post_meta($id, 'ulike', 1);
+		} else {
+			update_post_meta($id, 'ulike', ($im_raters + 1));
+		}
+		echo get_post_meta($id,'ulike',true);
+	}
+	die;
 }
 // Excerpt
 add_filter('excerpt_length','_excerpt_length');

@@ -320,8 +320,59 @@ $('.plinks a').each(function(){
     var imgSrc = $(this).attr('href')+'/favicon.ico'
     $(this).prepend( '<img src="'+imgSrc+'">' )
 })
+/* 
+ * zan
+ * ====================================================
+*/
+if( $('.post-like').length ){
+    tbquire(['jquery.cookie'], function() {
+        $('.content').on('click', '[etap="like"]', function(){
+            var _ta = $(this)
+            var pid = _ta.data('id')
+            var action = _ta.attr('etap')
 
+            if( _ta.hasClass('actived') ) return alert('已经点过赞啦！')
 
+            if ( !pid || !/^\d{1,}$/.test(pid) ) return alert('文章ID错误');
+
+            if( !jsui.is_signin ){
+                var lslike = lcs.get('_likes') || ''
+                if( lslike.indexOf(','+pid+',')!==-1 ) return alert('已经点过赞啦！')
+
+                if( !lslike ){
+                    lcs.set('_likes', ','+pid+',')
+                }else{
+                    if( lslike.length >= 160 ){
+                        lslike = lslike.substring(0,lslike.length-1)
+                        lslike = lslike.substr(1).split(',')
+                        lslike.splice(0,1)
+                        lslike.push(pid)
+                        lslike = lslike.join(',')
+                        lcs.set('_likes', ','+lslike+',')
+                    }else{
+                        lcs.set('_likes', lslike+pid+',')
+                    }
+                }
+            }
+
+            var ajax_data = {
+                action: "im_like",
+                p_id: pid,
+                p_action: action
+            };
+            $.post("/wp-admin/admin-ajax.php", ajax_data,
+                function(data) {
+                    if(isNaN(data)) {
+                        return alert('请稍后再试')
+                    }
+                    _ta.toggleClass('actived')
+                    _ta.find('span').html(data)
+                }
+            );
+            return false;
+        })
+    })
+}
 /* 
  * comment
  * ====================================================

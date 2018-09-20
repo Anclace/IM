@@ -50,6 +50,7 @@ function optionsframework_options() {
 	$post_widgets = array(
 		'views' => __('阅读量（无需安装插件）','im'),
 		'comments' => __('评论数（列表）','im'),
+		'like' => __('赞（列表）','im'),
 		'pubdate' => __('发布时间（列表）','im'),
 		'authors' => __('作者（列表）','im'),
 		'catlink' => __('分类链接（列表）','im')
@@ -57,6 +58,7 @@ function optionsframework_options() {
 	$post_widgets_defaults = array(
 		'views' => '1',
 		'comments' => '1',
+		'like' => '1',
 		'pubdate' => '1',
 		'authors' => '1',
 		'catlink' => '1'
@@ -137,11 +139,14 @@ function optionsframework_options() {
 	);
 	// Show Sidebar
 	$options[] = array(
-		'name' => __('是否显示侧栏','im'),
-		'desc' => __('显示侧栏','im'),
-		'id'   => 'show_sidebar',
-		'std'  => '1',
-		'type' => 'checkbox'
+		'name' => __('网站排版方式【是否显示侧栏（如何显示）】','im'),
+		'id' => "sidebar_type",
+		'std' => "site-layout-2",
+		'type' => "images",
+		'options' => array(
+			'site-layout-1' => $imagepath . '1col.png',
+			'site-layout-2' => $imagepath . '2cr.png',
+			'site-layout-3' => $imagepath . '2cl.png')
 	);
 	// Content Max Width
 	$options[] = array(
@@ -219,7 +224,7 @@ function optionsframework_options() {
 		'name' => __('列表中评论数靠右','im'),
 		'desc' => __('列表中评论数靠右','im'),
 		'id'   => 'list_comments_r',
-		'std'  => '1',
+		'std'  => '0',
 		'type' => 'checkbox'
 	);
 	// Author Link

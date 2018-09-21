@@ -309,11 +309,16 @@ if (_wid>1024 && _sidebar.length) {
 
 
 }
-
-
-
-
-
+/* 
+ * rewards
+ * ====================================================
+*/
+$('[data-event="rewards"]').on('click', function(){
+    $('.rewards-popover-mask, .rewards-popover').fadeIn()
+})
+$('[data-event="rewards-close"]').on('click', function(){
+    $('.rewards-popover-mask, .rewards-popover').fadeOut()
+})
 
 
 $('.plinks a').each(function(){

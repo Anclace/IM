@@ -269,6 +269,7 @@ body{background-color:#f6f6f6;position:relative;	/*margin-top: 79px;*/}
 	.excerpt .meta time{margin-right: 15px;display: none;}
 	.excerpt .meta .pc{color: #bbb;margin: 0;}
 	.excerpt .meta .post-like{color: #bbb;}
+	.excerpt .meta .post-like.actived {color:#FF5E52;}
 	.excerpt .meta .post-like .fa{display: inline-block;}
 
 	.excerpt-sticky header{text-indent:34px;position: relative;}
@@ -309,7 +310,8 @@ body{background-color:#f6f6f6;position:relative;	/*margin-top: 79px;*/}
 .excerpt-minic .author{margin-right:20px;}
 .excerpt-minic .meta{color:#999;margin-bottom:15px;font-size:12px;padding-bottom:15px;border-bottom:1px solid #eaeaea;}
 .excerpt-minic .meta .fa{margin-right:4px;}
-.excerpt-minic .meta a{color:#999;text-decoration:underline;}
+.excerpt-minic .meta a{color:#999;/*text-decoration:underline;*/}
+.excerpt-minic .meta .post-like.actived {color:#FF5E52;cursor: not-allowed;}
 .excerpt-minic .meta a:hover{color:#45B6F7;}
 .excerpt-minic .article-content p{text-indent:30px;}
 .excerpt-minic .article-content p:last-child{margin-bottom:0;}
@@ -2132,7 +2134,7 @@ pre.prettyprint.linenums ol li {
 .rewards-popover{position:fixed;top:50%;left:50%;margin:-200px 0 0 -275px;width:550px;background-color:#FFF;padding:40px 20px 50px;border-radius:4px;overflow:hidden;box-shadow:0 1px 5px rgba(0,0,0,0.4);z-index:9999;display:none;text-align:center}
 .rewards-popover h3{font-size:18px;font-weight:bold;text-align:center;margin:0 15px 30px}
 .rewards-popover-item{display:inline-block;width:200px;margin:0 20px}
-.rewards-popover-item h4{margin:0 20px 10px;font-size:15px}
+.rewards-popover-item figcaption{margin:10px 20px 0;font-size:15px}
 .rewards-popover-item img{width:200px;height:200px;background-color:#eee;border-radius:2px;padding:5px}
 .rewards-popover-close{position:absolute;top:0;right:0;padding:15px;font-size:16px;line-height:1;color:#999;cursor:pointer}
 .rewards-popover-close&:hover{color:#666}
@@ -2143,7 +2145,7 @@ pre.prettyprint.linenums ol li {
     .rewards-popover{width:300px;margin-left:-150px;margin-top:-125px;padding:30px 10px;}
     .rewards-popover h3{font-size:16px;margin:0 5px 15px;}
     .rewards-popover-item{width:125px;margin:0 5px;}
-    .rewards-popover-item h4{font-size:12px;margin:0 0 10px;}
+    .rewards-popover-item figcaption{font-size:12px;margin:10px 0 0;}
     .rewards-popover-item img{width:125px;height:125px;}
 }
 

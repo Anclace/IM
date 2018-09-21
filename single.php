@@ -24,8 +24,12 @@
 			echo '<div class="asb-post-footer"><b>AD：</b><strong>【' . im('ads_post_02_prefix') . '】</strong><a'.(im('ads_post_02_link_blank')?' target="_blank"':'').' href="' . im('ads_post_02_link') . '">' . im('ads_post_02_title') . '</a></div>';
 		} ?>
 		<?php  
-			if( im('direct_link')['article_article'] ){
-				_moloader('mo_post_link');
+			if( im('direct_link')['article_article'] || im('post_widgets')['like'] || im('reward_enable') ){
+				echo '<div class="post-actions">';
+					if( im('post_widgets')['like'] ) _moloader('mo_like');
+					if( im('reward_enable') ) _moloader('mo_reward');
+					if( im('direct_link')['article_article'] ) _moloader('mo_post_link');
+				echo '</div>';
 			}
 		?>
 		<?php if( im('post_copyright') ){

@@ -1298,6 +1298,51 @@ with(document)0[(getElementsByTagName("head")[0]||body).appendChild(createElemen
 		'name' => __('功能设置','im'),
 		'type' => 'heading'
 	);
+	// Reward
+	$options[] = array(
+		'name' => __('打赏功能','im'),
+		'desc' => __('开启打赏功能','im'),
+		'id'   => 'reward_enable',
+		'std'  => '1',
+		'type' => 'checkbox'
+	);
+	// Reward words
+	$options[] = array(
+		'desc' => __('打赏说明文字','im'),
+		'id'   => 'reward_info',
+		'std'  => '您的鼓励是我们前进的动力',
+		'type' => 'text',
+		'class'=> 'reward_enable_hidden'
+	);
+	// Reward method
+	for($i = 1;$i <= 2;$i++){
+		// Carousel Figure Item Title
+		$options[] = array(
+			'name' => __('打赏方式','im').$i,
+			'desc' => __('打赏方式','im'),
+			'id'   => 'reward_method_'.$i,
+			'std'  => '支付宝打赏',
+			'type' => 'text',
+			'class'=> 'reward_enable_hidden'
+		);
+		// Carousel Figure Item Link
+		$options[] = array(
+			'desc' => __('链接地址（适用于手机端）','im'),
+			'id'   => 'reward_method_l'.$i,
+			'std'  => '',
+			'type' => 'text',
+			'class'=> 'reward_enable_hidden'
+		);
+		// Carousel Figure Item Image
+		$options[] = array(
+			'desc' => __('图片上传（200*200）','im'),
+			'id'   => 'reward_method_img'.$i,
+			'std'  => $imagepath.'qrcode_al.jpg',
+			'type' => 'upload',
+			'class'=> 'reward_enable_hidden'
+		);
+	}
+
 	// Micro Categories
 	$options[] = array(
 		'name' => __('微分类','im'),
@@ -1401,13 +1446,13 @@ with(document)0[(getElementsByTagName("head")[0]||body).appendChild(createElemen
 		'std'  => '1',
 		'type' => 'checkbox'
 	);
-	// Direct Link Title
-	$options[] = array(
-		'desc' => __('自定义显示文字，默认为：直达链接','im'),
-		'id'   => 'direct_link_title',
-		'std'  => __('直达链接','im'),
-		'type' => 'text'
-	);
+	// Direct Link Title[180921改为每篇文章内自定义]
+	// $options[] = array(
+	// 	'desc' => __('自定义显示文字，默认为：直达链接','im'),
+	// 	'id'   => 'direct_link_title',
+	// 	'std'  => __('直达链接','im'),
+	// 	'type' => 'text'
+	// );
 	/**
 	 * Customizitons Settings
 	 */

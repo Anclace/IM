@@ -44,10 +44,7 @@ $description = trim(strip_tags(category_description()));
 					        if ( comments_open() && im('post_widgets')['comments'] ) {
 					            echo '<a class="pc" href="'.get_comments_link().'"><i class="fa fa-comments-o"></i>'._get_post_comments().'</a>';
 					        }
-							if ( im('post_widgets')['like'] ) {
-								$liked = isset($_COOKIE['ulike_'.get_the_ID()])?' actived':'';
-								echo '<a href="javascript:;" etap="like" data-id="'.get_the_ID().'" class="post-like'.$liked.'" title="点赞"><i class="fa fa-thumbs-o-up"></i>'._get_post_like_number().'</a>';
-							}
+							if ( im('post_widgets')['like'] ) _moloader('mo_like');
 					        echo '</p>';
 					        echo '<div class="article-content">'; the_content(); echo '</div>';
 					    echo '</article>';

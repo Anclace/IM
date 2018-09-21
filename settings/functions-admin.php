@@ -199,9 +199,14 @@ function postmeta_keywords_description_save($post_id){
  */
 $postmeta_direct_link = array(
 	array(
-		"name"  => "direct_link",
-		"std"   => ""/*,
-		"tittle"=> __("直达链接","im")."："*/
+		"name"  => "direct_link_txt",
+		"std"   => "",
+		"title"=> __("按钮文字","im")."："
+	),
+	array(
+		"name"  => "direct_link_href",
+		"std"   => "",
+		"title"=> __("按钮链接","im")."："
 	)
 );
 if(im('direct_link')['list_article']||im('direct_link')['article_article']){

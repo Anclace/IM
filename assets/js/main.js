@@ -44,7 +44,7 @@ if( $('.sns-wechat').length ){
         if( !$('#modal-wechat').length ){
             $('body').append('\
                 <div class="modal fade" id="modal-wechat" tabindex="-1" role="dialog" aria-hidden="true">\
-                    <div class="modal-dialog" style="margin-top:200px;width:340px;">\
+                    <div class="modal-dialog" style="margin:150px auto;width:300px;">\
                         <div class="modal-content">\
                             <div class="modal-header">\
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>\
@@ -98,6 +98,7 @@ if( Number(jsui.ajaxpager) > 0 && ($('.excerpt').length || $('.excerpt-minic').l
                 item: '.excerpt',
                 pagination: '.pagination',
                 next: '.next-page a',
+                noneleft:'<span class="ias_noneleft"><i>都被你看光了</i></span>',
                 loader: '<div class="pagination-loading"><img src="'+jsui.uri+'/images/loading.gif"></div>',
                 trigger: 'More',
                 onRenderComplete: function() {
@@ -120,6 +121,7 @@ if( Number(jsui.ajaxpager) > 0 && ($('.excerpt').length || $('.excerpt-minic').l
                 item: '.excerpt-minic',
                 pagination: '.pagination',
                 next: '.next-page a',
+                noneleft:'<span class="ias_noneleft"><i>都被你看光了</i></span>',
                 loader: '<div class="pagination-loading"><img src="'+jsui.uri+'/images/loading.gif"></div>',
                 trigger: 'More',
                 onRenderComplete: function() {
@@ -195,18 +197,22 @@ if( $('.prettyprint').length ){
  * rollbar
  * ====================================================
 */
+jsui.bd.append('<div class="m-mask"></div>')
 jsui.rb_comment = ''
 if (jsui.bd.hasClass('comment-open')) {
     jsui.rb_comment = "<li><a href=\"javascript:(scrollTo('#comments',-15));\"><i class=\"fa fa-comments\"></i></a><h6>去评论<i></i></h6></li>"
 }
-
-jsui.bd.append('\
-    <div class="m-mask"></div>\
-    <div class="rollbar"><ul>'
-    +jsui.rb_comment+
-    '<li><a href="javascript:(scrollTo());"><i class="fa fa-angle-up"></i></a><h6>去顶部<i></i></h6></li>\
-    </ul></div>\
-')
+jsui.totop = '<li  class="rollbar-totop"><a href="javascript:(scrollTo());"><i class="fa fa-angle-up"></i></a><h6>去顶部<i></i></h6></li>'
+if($('.rollbar ul').length){
+    $('.rollbar ul').append(jsui.rb_comment+jsui.totop)
+}else{
+    jsui.bd.append('\
+        <div class="rollbar rollbar-rb"><ul>'
+        +jsui.rb_comment
+        +jsui.totop+
+        '</ul></div>\
+    ')
+}
 
 
 
@@ -216,9 +222,7 @@ $(window).resize(function(event) {
     _wid = $(window).width()
 });
 
-
-
-var scroller = $('.rollbar')
+var scroller = $('.rollbar-totop')
 var _fix = (jsui.bd.hasClass('nav_fixed') && !jsui.bd.hasClass('page-template-navs')) ? true : false
 $(window).scroll(function() {
     var h = document.documentElement.scrollTop + document.body.scrollTop
@@ -229,7 +233,7 @@ $(window).scroll(function() {
         jsui.bd.removeClass('nav-fixed')
     }
 
-    h > 200 ? scroller.fadeIn() : scroller.fadeOut();
+    h > 100 ? scroller.fadeIn() : scroller.fadeOut();
 })
 
 
@@ -473,7 +477,13 @@ $('.search-show').bind('click', function(){
 */
 
 jsui.bd.append( $('.site-navbar').clone().attr('class', 'm-navbar') )
+$('.m-navbar li.menu-item-has-children').each(function(){
+    $(this).append('<i class="fa fa-angle-down faa"></i>')
+})
 
+$('.m-navbar li.menu-item-has-children .faa').on('click', function(){
+    $(this).parent().find('.sub-menu').slideToggle(300)
+})
 $('.m-icon-nav').on('click', function(){
     jsui.bd.addClass('m-nav-show')
 

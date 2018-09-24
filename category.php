@@ -52,7 +52,9 @@ $description = trim(strip_tags(category_description()));
 					_moloader('mo_paging');
 					wp_reset_query();
 				}else{
-					echo '<div class="pagetitle"><h1>', single_cat_title(), '</h1>'.$pagedtext.'</div>';
+					echo '<div class="catleader"><h1>', single_cat_title(),$pagedtext.'</h1>',
+						$description?('<p class="catleader-desc">'.$description.'</p>'):'',
+						'</div>';
 					get_template_part( 'excerpt' ); 
 				}
 			?>

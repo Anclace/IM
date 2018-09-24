@@ -33,6 +33,11 @@
 		<?php echo im('trackcode') ?>
 	</div>
 </footer>
+<?php
+if(im('cservices')){
+	_moloader('mo_cservice');
+}
+?>
 <?php  
 	$roll = '';
 	if( is_home() && im('sidebar_scroll_index') ){

@@ -79,3 +79,4 @@
 		?>
 	</div>
 </div>
+<?php _moloader('mo_breadcrumb');?>

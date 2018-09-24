@@ -718,7 +718,10 @@ filter:alpha(opacity=85);}
 .ias_trigger{margin: 15px 0 0;}
 .ias_trigger a{display: block;background-color: #e6e6e6;line-height: 32px;text-align: center;color: #999;}
 .ias_trigger a:hover{display: block;background-color: #ddd;color: #666;}
-
+/*0924*/
+.ias_noneleft {display: block;margin:15px auto 0;text-align: center;position: relative;}
+.ias_noneleft i {position: relative;z-index: 2;background: #f6f6f6;padding:0 3px;}
+.ias_noneleft:after {content: ' ';height: 1px;width:100%;background: #999999;position: absolute;top:50%;left:0;}
 
 /* pagenav ======================================================================================================== */
 .pagenav {

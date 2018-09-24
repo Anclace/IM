@@ -45,7 +45,7 @@ tbquire.config({
 		'router'        : 'libs/router.min',
 		'lazyload'      : 'libs/lazyload.min',
 		'prettyprint'   : 'libs/prettyprint',
-		'ias'           : 'libs/ias.min',
+		'ias'           : 'libs/jquery-ias.min',
 		'hammer'        : 'libs/hammer.min',
 		'main'          : 'main',
 		'comment'       : 'comment',

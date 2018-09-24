@@ -63,6 +63,19 @@ function optionsframework_options() {
 		'authors' => '1',
 		'catlink' => '1'
 	);
+	// Customer service
+	$cservice = array(
+		'cqq' => __('QQ咨询','im'),
+		'cwx' => __('微信咨询','im'),
+		'ctel' => __('电话咨询','im'),
+		'col' => __('在线咨询','im')
+	);
+	$cservice_defaults = array(
+		'cqq' => '1',
+		'cwx' => '1',
+		'ctel' => '1',
+		'col' => '1'
+	);
 	// Pull all the categories into an array
 	$options_categories = array();
 	$options_categories_obj = get_categories();
@@ -1090,44 +1103,51 @@ function optionsframework_options() {
 	);
 	// Social WEIBO
 	$options[] = array(
-		'name' => __('微博','im'),
+		'name' => __('社交相关','im'),
 		'desc' => __('微博','im'),
 		'id'   => 'weibo',
 		'type' => 'text'
 	);
 	// Social TWITTER
 	$options[] = array(
-		'name' => __('Twitter','im'),
 		'desc' => __('Twitter','im'),
 		'id'   => 'twitter',
 		'type' => 'text'
 	);
 	// Social FACEBOOK
 	$options[] = array(
-		'name' => __('Facebook','im'),
 		'desc' => __('Facebook','im'),
 		'id'   => 'facebook',
 		'type' => 'text'
 	);
 	// Social QQ
 	$options[] = array(
-		'name' => __('QQ','im'),
 		'desc' => __('QQ','im'),
 		'id'   => 'qq',
 		'type' => 'text'
 	);
+	$options[] = array(
+		'desc' => __('QQ二维码（200*200）','im'),
+		'id'   => 'qq_qr',
+		'type' => 'upload'
+	);
 	// Social WECHAT
 	$options[] = array(
-		'name' => __('微信','im'),
 		'desc' => __('微信','im'),
 		'id'   => 'wechat',
 		'std'  => 'IM',
 		'type' => 'text'
 	);
 	$options[] = array(
-		'desc' => __('二维码上传（200*200）','im'),
+		'desc' => __('微信二维码（200*200）','im'),
 		'id'   => 'wechat_qr',
 		'type' => 'upload'
+	);
+	$options[] = array(
+		'desc' => __('电话','im'),
+		'id'   => 'tel_num',
+		'type' => 'text',
+		'class'=> 'mini'
 	);
 	// Social RSS
 	$options[] = array(
@@ -1137,29 +1157,52 @@ function optionsframework_options() {
 		'std'  => get_feed_link(),
 		'type' => 'text'
 	);
+	// Customer service
+	$options[] = array(
+		'name' => __('客服系统','im'),
+		'desc' => __('开启客服系统','im'),
+		'id'   => 'cservices',
+		'std'  => '1',
+		'type' => 'checkbox'
+	);
+	$options[] = array(
+		'class'=> 'cservices_hidden',
+		'id'   => 'cservices_widgets',
+		'std'  => $cservice_defaults,
+		'type' => 'multicheck',
+		'options' => $cservice
+	);
+	$options[] = array(
+		'desc' => __('如显示在线咨询按钮，填对应链接','im'),
+		'id'   => 'col_link',
+		'std'  => '',
+		'type' => 'text',
+		'class'=> 'im-cservices_widgets-col_hidden cservices_hidden'
+	);
 	// Comment Title
 	$options[] = array(
-		'name' => __('评论标题','im'),
+		'name' => __('评论相关','im'),
 		'desc' => __('评论标题','im'),
 		'id'   => 'comment_title',
 		'std'  => __('评论', 'im'),
-		'type' => 'text'
+		'type' => 'text',
+		'class'=> 'mini'
 	);
 	// Comment Placeholder
 	$options[] = array(
-		'name' => __('评论框默认字符','im'),
 		'desc' => __('评论框默认字符','im'),
 		'id'   => 'comment_placehoder',
 		'std'  => __('你说呀','im'),
-		'type' => 'text'
+		'type' => 'text',
+		'class'=> 'mini'
 	);
 	// Comment Submit Text
 	$options[] = array(
-		'name' => __('评论提交按钮字符','im'),
 		'desc' => __('评论提交按钮字符','im'),
 		'id'   => 'comment_submit_text',
 		'std'  => __('提交评论', 'im'),
-		'type' => 'text'
+		'type' => 'text',
+		'class'=> 'mini'
 	);
 	// Email notification when user comments are replied
 	$options[] = array(
@@ -1502,6 +1545,5 @@ with(document)0[(getElementsByTagName("head")[0]||body).appendChild(createElemen
 		'name' => __('其他','im'),
 		'type' => 'heading'
 	);
-	
 	return $options;
 }

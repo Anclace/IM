@@ -63,26 +63,26 @@ function mo_breadcrumb() {
 			echo $before . get_the_title() . $after;
 		} elseif ( is_search() ) { // 搜索结果
 			echo $before ;
-			printf( __( 'Search Results for: %s', 'im' ),  get_search_query() );
+			printf( __( '搜索: %s的结果', 'im' ),  get_search_query() );
 			echo  $after;
 		} elseif ( is_tag() ) { //标签 存档
 			echo $before ;
-			printf( __( 'Tag Archives: %s', 'im' ), single_tag_title( '', false ) );
+			printf( __( '标签: %s归档', 'im' ), single_tag_title( '', false ) );
 			echo  $after;
 		} elseif ( is_author() ) { // 作者存档
 			global $author;
 			$userdata = get_userdata($author);
 			echo $before ;
-			printf( __( 'Author Archives: %s', 'im' ),  $userdata->display_name );
+			printf( __( '作者: %s的文章', 'im' ),  $userdata->display_name );
 			echo  $after;
 		} elseif ( is_404() ) { // 404 页面
 			echo $before;
-			_e( 'Not Found', 'im' );
+			_e( '未找到', 'im' );
 			echo  $after;
 		}
 		if ( get_query_var('paged') ) { // 分页
 			if ( is_category() || is_day() || is_month() || is_year() || is_search() || is_tag() || is_author() )
-				echo sprintf( __( '( Page %s )', 'im' ), get_query_var('paged') );
+				echo sprintf( __( '( 第 %s 页)', 'im' ), get_query_var('paged') );
 		}
 		echo '</div></div>';
 	}

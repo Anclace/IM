@@ -41,7 +41,7 @@
 			<div class="action-share"><?php _moloader('mo_share'); ?></div>
 		<?php } ?>
 
-		<div class="article-tags"><?php the_tags('标签：','',''); ?></div>
+		<div class="article-tags"><?php the_tags('<i class="fa fa-tags"></i>标签：','',''); ?></div>
 
 		<?php if( im('post_author_info') ){ ?>
 		<div class="article-author">

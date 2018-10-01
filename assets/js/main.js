@@ -190,9 +190,6 @@ if( $('.prettyprint').length ){
         prettyPrint()
     })
 }
-
-
-
 /* 
  * rollbar
  * ====================================================
@@ -200,21 +197,22 @@ if( $('.prettyprint').length ){
 jsui.bd.append('<div class="m-mask"></div>')
 jsui.rb_comment = ''
 if (jsui.bd.hasClass('comment-open')) {
-    jsui.rb_comment = "<li><a href=\"javascript:(scrollTo('#comments',-15));\"><i class=\"fa fa-comments\"></i></a><h6>去评论<i></i></h6></li>"
+    jsui.rb_comment = "<li><a href=\"javascript:(scrollTo('#comments',-15));\"><i class=\"fa fa-comments\"></i></a><h6>去评论</h6></li>"
 }
-jsui.totop = '<li  class="rollbar-totop"><a href="javascript:(scrollTo());"><i class="fa fa-angle-up"></i></a><h6>去顶部<i></i></h6></li>'
+jsui.totop = '<li  class="rollbar-totop"><a href="javascript:(scrollTo());"><i class="fa fa-angle-up"></i></a><h6>去顶部</h6></li>'
 if($('.rollbar ul').length){
-    $('.rollbar ul').append(jsui.rb_comment+jsui.totop)
+    $('.rollbar').append('<ul class="hangup">'+jsui.rb_comment+jsui.totop+'</ul>')
 }else{
     jsui.bd.append('\
-        <div class="rollbar rollbar-rb"><ul>'
-        +jsui.rb_comment
-        +jsui.totop+
+        <div class="rollbar"><ul class="hangup">'
+            +jsui.rb_comment
+            +jsui.totop+
         '</ul></div>\
     ')
 }
-
-
+$('.rollbar-qrcode a').on('click', function(){
+    $(this).next('h6').toggle()
+})
 
 var _wid = $(window).width()
 

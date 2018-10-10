@@ -53,7 +53,8 @@ function optionsframework_options() {
 		'like' => __('赞（列表）','im'),
 		'pubdate' => __('发布时间（列表）','im'),
 		'authors' => __('作者（列表）','im'),
-		'catlink' => __('分类链接（列表）','im')
+		'catlink' => __('分类链接（列表）','im'),
+		'sticky_icon' => __('置顶图标（列表）','im')
 	);
 	$post_widgets_defaults = array(
 		'views' => '1',
@@ -61,7 +62,8 @@ function optionsframework_options() {
 		'like' => '1',
 		'pubdate' => '1',
 		'authors' => '1',
-		'catlink' => '1'
+		'catlink' => '1',
+		'sticky_icon' => '0'
 	);
 	// Customer service
 	$cservice = array(
@@ -309,6 +311,13 @@ function optionsframework_options() {
 	$options[] = array(
 		'name' => __('首页设置','im'),
 		'type' => 'heading'
+	);
+	// Enable sticky function
+	$options[] = array(
+		'name' => __('首页开启置顶功能','im'),
+		'desc' => __('首页列表启用置顶功能','im'),
+		'id'   => 'enable_sticky',
+		'type' => 'checkbox'
 	);
 	// Don't show articles in these categories
 	$options[] = array(
@@ -1396,7 +1405,7 @@ with(document)0[(getElementsByTagName("head")[0]||body).appendChild(createElemen
 	);
 	// Show posts from Micro Categories in home page
 	$options[] = array(
-		'name' => __('在首页显示微分类最新文章','im'),
+		// 'name' => __('在首页显示微分类最新文章','im'),
 		'desc' => __('在首页显示微分类最新文章','im'),
 		'id'   => 'micro_cat_home',
 		'std'  => '1',
@@ -1405,7 +1414,7 @@ with(document)0[(getElementsByTagName("head")[0]||body).appendChild(createElemen
 	);
 	// Micro Categories Title
 	$options[] = array(
-		'name' => __('标题（默认：今日观点）','im'),
+		// 'name' => __('标题（默认：今日观点）','im'),
 		'desc' => __('标题（默认：今日观点）','im'),
 		'id'   => 'micro_cat_home_title',
 		'std'  => __('今日观点','im'),
@@ -1414,7 +1423,7 @@ with(document)0[(getElementsByTagName("head")[0]||body).appendChild(createElemen
 	);
 	// Choose a category for micro category
 	$options[] = array(
-		'name' => __('选择分类设置为微分类','im'),
+		// 'name' => __('选择分类设置为微分类','im'),
 		'desc' => __('选择一个使用微分类展示模版，分类下文章将全文输出到微分类列表','im'),
 		'id'   => 'micro_cat_from',
 		'type' => 'select',

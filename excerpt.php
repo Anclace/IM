@@ -8,7 +8,10 @@ while ( have_posts() ) : the_post();
     $_thumb = _get_post_thumbnail();
     $_excerpt_text = '';
     if( im('list_type')=='text' || (im('list_type') == 'auto' && strstr($_thumb, 'data-thumb="default"')) ){
-        $_excerpt_text = ' excerpt-text';
+        $_excerpt_text .= ' excerpt-text';
+    }
+    if(im('post_widgets')['sticky_icon']&&is_sticky()){
+        $_excerpt_text .= ' excerpt-sticky';
     }
     $ii++;
     echo '<article class="excerpt excerpt-'.$ii. $_excerpt_text .'">';
@@ -21,7 +24,7 @@ while ( have_posts() ) : the_post();
             if( im('post_widgets')['catlink'] && !is_category() ) {
                 $category = get_the_category();
                 if(! empty($category)){
-                    echo '<a class="cat" href="'.get_category_link($category[0]->term_id ).'">'.$category[0]->cat_name.'<i></i></a> ';
+                    echo '<a class="cat" href="'.get_category_link($category[0]->term_id ).'">'.$category[0]->cat_name.'</a>';
                 }
             };
             echo '<h2><a'._post_target_blank().' href="'.get_permalink().'" title="'.get_the_title().get_the_subtitle(false)._get_delimiter().get_bloginfo('name').'">'.get_the_title().get_the_subtitle().'</a></h2>';

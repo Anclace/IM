@@ -24,11 +24,8 @@
 			?>
 			<?php _the_ads($name='ads_index_01', $class='asb-index asb-index-01') ?>
 			<div class="title">
-				<h3>
-					<?php echo im('list_section_title') ? im('list_section_title') : '最新发布' ?>
-					<?php echo $pagedtext ?>
-				</h3>
-				<?php 
+				<h3><?php echo im('list_section_title') ? im('list_section_title') : '最新发布' ?> <?php echo $pagedtext ?></h3>
+				<?php
 					if( im('list_section_title_r') ){
 						echo '<div class="more">'.im('list_section_title_r').'</div>';
 					} 

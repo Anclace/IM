@@ -79,4 +79,14 @@
 		?>
 	</div>
 </div>
-<?php _moloader('mo_breadcrumb');?>
+<?php
+// Breadcrumb nav(Exclude templates from PAGE directory and CATEGORY minicat)
+_moloader('mo_is_minicat',false);
+if(preg_match('#/pages/#i', get_page_template())){
+
+}elseif (is_category()&&mo_is_minicat()) {
+
+}else{
+	_moloader('mo_breadcrumb');
+}
+?>

@@ -24,8 +24,12 @@ $description = trim(strip_tags(category_description()));
 			<?php _the_ads($name='ads_cat_01', $class='asb-cat asb-cat-01') ?>
 			<?php 
 				if( mo_is_minicat() ){
-					while ( have_posts() ) : the_post(); 
-					    echo '<article class="excerpt-minic">';
+					while ( have_posts() ) : the_post();
+						$_excerpt_text = '';
+						if(im('post_widgets')['sticky_icon']&&is_sticky()){
+							$_excerpt_text = ' excerpt-sticky';
+						}
+					    echo '<article class="excerpt-minic'.$_excerpt_text.'">';
 					        echo '<h2><a'._post_target_blank().' href="'.get_permalink().'" title="'.get_the_title()._get_delimiter().get_bloginfo('name').'">'.get_the_title().'</a></h2>';
 					        echo '<p class="meta">';
 					        if( im('post_widgets')['pubdate'] ){

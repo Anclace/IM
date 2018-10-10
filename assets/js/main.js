@@ -3,8 +3,6 @@ if( !window.console ){
         log: function(){}
     }
 }
-
-
 /*!
  * jQuery resizeend - A jQuery plugin that allows for window resize-end event handling.
  * 
@@ -20,8 +18,6 @@ if( !window.console ){
  * 
  */
 !function(a){var b=window.Chicago||{utils:{now:Date.now||function(){return(new Date).getTime()},uid:function(a){return(a||"id")+b.utils.now()+"RAND"+Math.ceil(1e5*Math.random())},is:{number:function(a){return!isNaN(parseFloat(a))&&isFinite(a)},fn:function(a){return"function"==typeof a},object:function(a){return"[object Object]"===Object.prototype.toString.call(a)}},debounce:function(a,b,c){var d;return function(){var e=this,f=arguments,g=function(){d=null,c||a.apply(e,f)},h=c&&!d;d&&clearTimeout(d),d=setTimeout(g,b),h&&a.apply(e,f)}}},$:window.jQuery||null};if("function"==typeof define&&define.amd&&define("chicago",function(){return b.load=function(a,c,d,e){var f=a.split(","),g=[],h=(e.config&&e.config.chicago&&e.config.chicago.base?e.config.chicago.base:"").replace(/\/+$/g,"");if(!h)throw new Error("Please define base path to jQuery resize.end in the requirejs config.");for(var i=0;i<f.length;){var j=f[i].replace(/\./g,"/");g.push(h+"/"+j),i+=1}c(g,function(){d(b)})},b}),window&&window.jQuery)return a(b,window,window.document);if(!window.jQuery)throw new Error("jQuery resize.end requires jQuery")}(function(a,b,c){a.$win=a.$(b),a.$doc=a.$(c),a.events||(a.events={}),a.events.resizeend={defaults:{delay:250},setup:function(){var b,c=arguments,d={delay:a.$.event.special.resizeend.defaults.delay};a.utils.is.fn(c[0])?b=c[0]:a.utils.is.number(c[0])?d.delay=c[0]:a.utils.is.object(c[0])&&(d=a.$.extend({},d,c[0]));var e=a.utils.uid("resizeend"),f=a.$.extend({delay:a.$.event.special.resizeend.defaults.delay},d),g=f,h=function(b){g&&clearTimeout(g),g=setTimeout(function(){return g=null,b.type="resizeend.chicago.dom",a.$(b.target).trigger("resizeend",b)},f.delay)};return a.$(this).data("chicago.event.resizeend.uid",e),a.$(this).on("resize",a.utils.debounce(h,100)).data(e,h)},teardown:function(){var b=a.$(this).data("chicago.event.resizeend.uid");return a.$(this).off("resize",a.$(this).data(b)),a.$(this).removeData(b),a.$(this).removeData("chicago.event.resizeend.uid")}},function(){a.$.event.special.resizeend=a.events.resizeend,a.$.fn.resizeend=function(b,c){return this.each(function(){a.$(this).on("resizeend",b,c)})}}()});
-
-
 /* 
  * jsui
  * ====================================================
@@ -62,7 +58,6 @@ if( $('.sns-wechat').length ){
     })
 }
 
-
 if( $('.carousel').length ){
     var el_carousel = $('.carousel')
 
@@ -86,7 +81,6 @@ if( $('.carousel').length ){
 
     })
 }
-
 
 if( Number(jsui.ajaxpager) > 0 && ($('.excerpt').length || $('.excerpt-minic').length) ){
     tbquire(['ias'], function() {
@@ -137,8 +131,6 @@ if( Number(jsui.ajaxpager) > 0 && ($('.excerpt').length || $('.excerpt-minic').l
         }
     });
 }
-
-
 /* 
  * lazyload
  * ====================================================
@@ -174,9 +166,6 @@ tbquire(['lazyload'], function() {
         threshold: 400
     })
 })
-
-
-
 /* 
  * prettyprint
  * ====================================================
@@ -233,8 +222,6 @@ $(window).scroll(function() {
 
     h > 100 ? scroller.fadeIn() : scroller.fadeOut();
 })
-
-
 /* 
  * bootstrap
  * ====================================================
@@ -243,9 +230,6 @@ $('.user-welcome').tooltip({
     container: 'body',
     placement: 'bottom'
 })
-
-
-
 /* 
  * sign
  * ====================================================
@@ -255,20 +239,16 @@ if (!jsui.bd.hasClass('logged-in')) {
         signpop.init()
     })
 }
-
-
 /* 
  * single
  * ====================================================
 */
-
 var _sidebar = $('.sidebar')
 if (_wid>1024 && _sidebar.length) {
     var h1 = 15,
         h2 = 30
     var rollFirst = _sidebar.find('.widget:eq(' + (jsui.roll[0] - 1) + ')')
     var sheight = rollFirst.height()
-
 
     rollFirst.on('affix-top.bs.affix', function() {
 
@@ -309,7 +289,6 @@ if (_wid>1024 && _sidebar.length) {
         }
     })
 
-
 }
 /* 
  * rewards
@@ -321,7 +300,6 @@ $('[data-event="rewards"]').on('click', function(){
 $('[data-event="rewards-close"]').on('click', function(){
     $('.rewards-popover-mask, .rewards-popover').fadeOut()
 })
-
 
 $('.plinks a').each(function(){
     var imgSrc = $(this).attr('href')+'/favicon.ico'
@@ -389,8 +367,6 @@ if (jsui.bd.hasClass('comment-open')) {
         comment.init()
     })
 }
-
-
 /* 
  * page u
  * ====================================================
@@ -400,8 +376,6 @@ if (jsui.bd.hasClass('page-template-pagesuser-php')) {
         user.init()
     })
 }
-
-
 /* 
  * page nav
  * ====================================================
@@ -421,26 +395,24 @@ if( jsui.bd.hasClass('page-template-pagesnavs-php') ){
     $('#navs nav ul').affix({
         offset: {
             top: $('#navs nav ul').offset().top,
-            bottom: $('.footer').height() + $('.footer').css('padding-top').split('px')[0]*2
+            bottom: $('.footer').outerHeight()
         }
     })
-
 
     if( location.hash ){
         var index = location.hash.split('#')[1]
         $('#navs nav li:eq('+index+')').addClass('active')
-        $('#navs nav .item:eq('+index+')').addClass('active')
+        $('#navs .items .item:eq('+index+')').addClass('active')
         scrollTo( '#navs .items .item:eq('+index+')' )
     }
     $('#navs nav a').each(function(e){
         $(this).click(function(){
             scrollTo( '#navs .items .item:eq('+$(this).parent().index()+')' )
             $(this).parent().addClass('active').siblings().removeClass('active')
+            $('#navs .items .item:eq('+e+')').addClass('active').siblings().removeClass('active')
         })
     })
 }
-
-
 /* 
  * page search
  * ====================================================
@@ -452,8 +424,6 @@ if( jsui.bd.hasClass('search-results') ){
         $(this).html( $(this).text().replace(reg, function(w){ return '<b>'+w+'</b>' }) )
     })
 }
-
-
 /* 
  * search
  * ====================================================
@@ -468,12 +438,10 @@ $('.search-show').bind('click', function(){
         jsui.bd.removeClass('m-nav-show')
     }
 })
-
 /* 
  * phone
  * ====================================================
 */
-
 jsui.bd.append( $('.site-navbar').clone().attr('class', 'm-navbar') )
 $('.m-navbar li.menu-item-has-children').each(function(){
     $(this).append('<i class="fa fa-angle-down faa"></i>')
@@ -497,8 +465,6 @@ $('.m-mask').on('click', function(){
 })
 
 
-
-
 if ($('.article-content').length){
     $('.article-content img').attr('data-tag', 'bdshare')
 }
@@ -520,12 +486,6 @@ function video_ok(){
         }
     })
 }
-
-
-
-
-
-
 /* functions
  * ====================================================
  */
@@ -595,15 +555,9 @@ function strToDate(str, fmt) { //author: meizz
             fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
     return fmt;
 }
-
-
-
-
-
-/* erphpdown 登录使用dux弹出登录框
+/* erphpdown 登录使用默认弹出登录框
  * ====================================================
  */
 $('.erphp-login-must').each(function(){
     $(this).addClass('signin-loader')
 })
-

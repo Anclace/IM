@@ -19,8 +19,10 @@ function archives_for_homepage($query){
         $pool = im('ignore_posts');
         $ignore_posts = explode("\n", $pool);
     }
-    if ( $query->is_home() && $query->is_main_query()) {    
-        $query->set('ignore_sticky_posts',1);
+    if ( $query->is_home() && $query->is_main_query()) {
+        if(!im('enable_sticky')){
+            $query->set('ignore_sticky_posts',1);
+        }
         $query->set('paged',$paged);
         $query->set('cat',$ignore_articles_cat);
         $query->set('post__not_in',$ignore_posts);

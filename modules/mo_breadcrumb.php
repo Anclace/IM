@@ -3,7 +3,7 @@ function mo_breadcrumb() {
 	$delimiter = '<small>»</small>'; // 分隔符
 	$before = '<span class="current">'; // 在当前链接前插入
 	$after = '</span>'; // 在当前链接后插入
-	if ( !is_home() && !is_front_page() || is_paged() ) {
+	if ( !is_home() && !is_front_page()/* || is_paged()*/ ) {
 		echo '<div itemscope itemtype="http://schema.org/WebPage" class="breadcrumbs"><div class="container">'.__( '当前位置:' , 'im' );
 		global $post;
 		$homeLink = get_bloginfo('url');
